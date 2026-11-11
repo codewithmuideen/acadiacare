@@ -1,0 +1,194 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==========================================================================
+   Acadia Care design tokens
+   Brand colours come from the existing identity:
+   - Logo magenta  #ED38B3  (logo.png)
+   - Site rose     #EA5478  (acadiacare.co.uk accent colour)
+   - Steel blue    #4682B4  (the "C" of the AC monogram favicon)
+   Warm neutrals are inspired by the Serenova reference palette.
+   Values are stored as RGB channels so Tailwind opacity modifiers work.
+   ========================================================================== */
+:root {
+  /* Brand */
+  --brand: 237 56 179;          /* #ED38B3 logo magenta — large/decorative use */
+  --brand-strong: 176 31 128;   /* #B01F80 AA text + buttons on light surfaces */
+  --brand-deep: 120 22 88;      /* #781658 pressed / hover on strong */
+  --brand-soft: 245 154 214;    /* #F59AD6 accent on dark surfaces */
+  --brand-tint: 251 232 244;    /* #FBE8F4 washes */
+  --rose: 234 84 120;           /* #EA5478 original site accent */
+
+  /* Secondary */
+  --steel: 70 130 180;          /* #4682B4 */
+  --steel-deep: 46 94 134;      /* #2E5E86 */
+  --steel-soft: 222 233 242;    /* #DEE9F2 */
+
+  /* Neutrals */
+  --ink: 31 26 23;              /* #1F1A17 primary text / dark sections */
+  --ink-soft: 67 62 49;         /* #433E31 warm dark brown */
+  --muted: 107 102 94;          /* #6B665E muted text (AA on cream) */
+  --cream: 248 245 240;         /* #F8F5F0 page background */
+  --surface: 255 255 255;       /* cards, inputs */
+  --sand: 237 231 221;          /* #EDE7DD alternate section */
+  --stone: 196 190 177;         /* #C4BEB1 */
+  --earth: 145 105 81;          /* #916951 */
+  --line: 221 214 203;          /* #DDD6CB borders */
+
+  /* Semantic aliases */
+  --color-primary: rgb(var(--brand-strong));
+  --color-secondary: rgb(var(--steel-deep));
+  --color-accent: rgb(var(--brand));
+  --color-bg: rgb(var(--cream));
+  --color-surface: rgb(var(--surface));
+  --color-text: rgb(var(--ink));
+  --color-text-muted: rgb(var(--muted));
+  --color-border: rgb(var(--line));
+  --color-hover: rgb(var(--brand-deep));
+
+  --header-h: 76px;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: calc(var(--header-h) + 24px);
+  }
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  body {
+    @apply bg-cream font-sans text-ink antialiased;
+    font-size: 1rem;
+    line-height: 1.7;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-display font-medium text-ink;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: rgb(var(--brand) / 0.22);
+  }
+
+  :focus-visible {
+    outline: 2px solid rgb(var(--brand-strong));
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  img {
+    @apply max-w-full;
+  }
+}
+
+@layer components {
+  .container-site {
+    @apply mx-auto w-full max-w-site px-4 sm:px-6 lg:px-10;
+  }
+
+  .eyebrow {
+    @apply inline-flex items-center gap-3 font-sans text-[0.72rem] font-semibold uppercase tracking-[0.22em] text-brand-strong;
+  }
+  .eyebrow::before {
+    content: '';
+    @apply block h-px w-8 bg-current;
+  }
+  .eyebrow-light {
+    @apply text-brand-soft;
+  }
+
+  .lede {
+    @apply text-lg leading-relaxed text-ink-soft md:text-xl;
+  }
+
+  .link-underline {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .link-underline:hover,
+  .link-underline:focus-visible {
+    background-size: 100% 1px;
+  }
+
+  .prose-legal h2 {
+    @apply mb-4 mt-12 text-display-sm;
+  }
+  .prose-legal p,
+  .prose-legal li {
+    @apply text-ink-soft;
+  }
+  .prose-legal p {
+    @apply mb-4;
+  }
+  .prose-legal ol {
+    @apply mb-6 list-decimal space-y-3 pl-6;
+  }
+
+  /* Form controls */
+  .field-label {
+    @apply mb-2 block text-sm font-semibold text-ink;
+  }
+  .field-input {
+    @apply block w-full rounded-lg border border-line bg-surface px-4 py-3 text-base text-ink transition-colors duration-200 placeholder:text-muted/70 hover:border-stone focus:border-brand-strong focus:outline-none focus:ring-4 focus:ring-brand/15;
+  }
+  .field-input[aria-invalid='true'] {
+    @apply border-rose ring-4 ring-rose/10;
+  }
+  .field-hint {
+    @apply mt-1.5 text-sm text-muted;
+  }
+}
+
+@layer utilities {
+  .text-outline {
+    color: transparent;
+    -webkit-text-stroke: 1px rgb(var(--brand-strong) / 0.55);
+  }
+  .grain {
+    position: relative;
+    isolation: isolate;
+  }
+  .grain::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.35;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
