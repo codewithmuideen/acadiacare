@@ -2,7 +2,7 @@
 const v = (name) => `rgb(var(--${name}) / <alpha-value>)`
 
 export default {
-  content: ['./index.html', './src/**/*.{js,jsx}'],
+  content: ['./index.html', './src/**/*.{js,jsx}', './node_modules/liquid-glass-react/dist/*.js'],
   theme: {
     screens: {
       xs: '400px',

@@ -80,4 +80,14 @@ export const images = {
     h: 3000,
     alt: 'An older couple laughing together outside their home',
   },
+  'social-activity-dancing': {
+    w: 2000,
+    h: 1333,
+    alt: 'A carer holds hands with older residents as they dance and laugh together in a lounge',
+  },
+  'care-professional-home-visit': {
+    w: 2000,
+    h: 1333,
+    alt: 'A care professional checks an older man’s blood pressure at his kitchen table',
+  },
 }

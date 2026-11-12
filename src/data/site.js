@@ -135,7 +135,7 @@ export const services = [
     number: '03',
     title: 'Staffing Solutions',
     short:
-      'Bank, temporary or contract Support Workers and Care Assistants — within a few hours if necessary, and for any length of time.',
+      'Bank, temporary or contract Support Workers and Care Assistants, within a few hours if necessary, and for any length of time.',
     image: 'carer-leaning-resident',
     paragraphs: [
       'Please ensure that you book an appointment with us so that you are familiar with the type of care we provide. We are equally interested in learning more about your company culture and ethics so that we can be up to date with the kind of service you require.',

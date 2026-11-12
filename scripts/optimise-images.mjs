@@ -26,7 +26,7 @@ const photos = {
   'carer-breakfast-home-visit': 'Header-3.jpg',
   'carer-embrace-mono': 'Services.jpg',
   'garden-walk-mono': 'Services-2.jpg',
-  // Licensed (Unsplash License) — see IMAGE_CREDITS.md
+  // Licensed (Unsplash License), see IMAGE_CREDITS.md
   'carer-laughing-resident': 'licensed/dMhB7w99ju8.jpg',
   'carer-shared-laugh': 'licensed/GPrh_GLiWCI.jpg',
   'carer-leaning-resident': 'licensed/qW3DLnehg9w.jpg',
@@ -37,6 +37,8 @@ const photos = {
   'holding-hands-mono': 'licensed/mwGrAl1X514.jpg',
   'garden-independence': 'licensed/7BXmH9YzNAI.jpg',
   'couple-independent-living': 'licensed/lNTbuoYMSro.jpg',
+  'social-activity-dancing': 'licensed/96vNkptUfz0.jpg',
+  'care-professional-home-visit': 'licensed/dcBO4nt4MRE.jpg',
 }
 
 async function run() {

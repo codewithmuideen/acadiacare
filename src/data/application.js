@@ -84,7 +84,7 @@ export const transport = ['Car', 'Bicycle', 'Motorcycle', 'Lift', 'Public transp
  * Original consent wording referenced the Data Protection Act 1998, which was
  * replaced by the UK GDPR and the Data Protection Act 2018. The wording below
  * keeps the original meaning but references current legislation.
- * LEGAL REVIEW REQUIRED before launch — see docs/SECURE-APPLICATION-SUBMISSION.md.
+ * LEGAL REVIEW REQUIRED before launch. See docs/SECURE-APPLICATION-SUBMISSION.md.
  */
 export const consentText =
   'Some information provided in this form may be classed as sensitive (special category) data under the UK GDPR and the Data Protection Act 2018. For this we require your explicit consent to hold this information. By signing the declaration, you are consenting to us holding and processing this data in accordance with data protection law, and that we have your authorisation to disclose relevant details to a third party where necessary.'

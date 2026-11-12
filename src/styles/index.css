@@ -13,7 +13,7 @@
    ========================================================================== */
 :root {
   /* Brand */
-  --brand: 237 56 179;          /* #ED38B3 logo magenta — large/decorative use */
+  --brand: 237 56 179;          /* #ED38B3 logo magenta, large/decorative use */
   --brand-strong: 176 31 128;   /* #B01F80 AA text + buttons on light surfaces */
   --brand-deep: 120 22 88;      /* #781658 pressed / hover on strong */
   --brand-soft: 245 154 214;    /* #F59AD6 accent on dark surfaces */
@@ -48,6 +48,12 @@
   --color-hover: rgb(var(--brand-deep));
 
   --header-h: 76px;
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --header-h: 112px; /* contact strip (36px) + main bar (76px) */
+  }
 }
 
 @layer base {
