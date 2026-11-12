@@ -183,8 +183,8 @@ export default function About() {
         eyebrow="About Acadia Care"
         title={['Dignity, independence', { text: 'and your choice of care.', className: 'italic text-brand-strong' }]}
         intro="Acadia Support Services Ltd specialises in the recruitment of support workers and carers, providing a solution for staffing needs across the whole social care spectrum."
-        image="carer-conversation-living-room"
-        imagePosition="62% 50%"
+        image="carer-laughing-resident"
+        imagePosition="40% 35%"
       />
       <Story />
       <Pillars />

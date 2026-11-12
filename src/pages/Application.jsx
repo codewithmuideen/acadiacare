@@ -29,7 +29,7 @@ export default function Application() {
         eyebrow="Careers at Acadia"
         title={['Make a difference,', { text: 'every shift.', className: 'italic text-brand-strong' }]}
         intro="We offer competitive rates of pay, work benefits and flexibility to support workers and carers who are qualified, or working towards a qualification, and experienced in the field of care."
-        image="care-professional-home-visit"
+        image="carer-leaning-resident"
         imagePosition="55% 30%"
       />
 

@@ -128,7 +128,7 @@ export default function Services() {
         title={['Care and staffing,', { text: 'thoughtfully matched.', className: 'italic text-brand-strong' }]}
         intro="Three services across the social care spectrum, each delivered by professionally trained, Enhanced DBS-checked support workers and carers."
         image="carer-shared-laugh"
-        imagePosition="45% 40%"
+        imagePosition="40% 30%"
       >
         <nav aria-label="Services on this page">
           <ul className="flex flex-col gap-1 sm:flex-row sm:flex-wrap sm:gap-x-8">
