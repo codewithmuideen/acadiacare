@@ -49,7 +49,7 @@ export default function ScrollWorld() {
   useEffect(() => {
     const el = ref.current
     if (!el) return
-    const io = new IntersectionObserver(([e]) => setActive(e.isIntersecting), { rootMargin: '200px 0px' })
+    const io = new IntersectionObserver(([e]) => setActive(e.isIntersecting), { rootMargin: '100% 0px' })
     io.observe(el)
     return () => io.disconnect()
   }, [])

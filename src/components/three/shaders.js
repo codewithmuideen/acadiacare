@@ -72,7 +72,7 @@ void main() {
   // Cursor lens: gentle bulge around the pointer
   vec2 md = uv - uMouse; md.x *= aspect;
   float mdist = length(md);
-  float lens = smoothstep(0.32, 0.0, mdist) * uHover;
+  float lens = (1.0 - smoothstep(0.0, 0.32, mdist)) * uHover;
   uv -= vec2(md.x / aspect, md.y) * lens * 0.18;
 
   // Liquid wavefront expanding from the origin, shaped by layered noise
@@ -81,7 +81,7 @@ void main() {
   float n = snoise(uv * 2.6 + uTime * 0.12) * 0.6 + snoise(uv * 7.5 - uTime * 0.08) * 0.25;
   float reach = length(vec2(aspect, 1.0)) + 0.5;
   float front = uProgress * (reach + 0.5) - 0.25;
-  float m = smoothstep(front + 0.16, front - 0.16, r + n * 0.22);
+  float m = 1.0 - smoothstep(front - 0.16, front + 0.16, r + n * 0.22);
   float edge = clamp(m * (1.0 - m) * 4.0, 0.0, 1.0);
 
   vec2 dir = normalize(vec2(o.x / aspect, o.y) + 1e-5);

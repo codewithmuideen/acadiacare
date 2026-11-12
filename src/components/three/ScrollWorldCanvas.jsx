@@ -6,7 +6,6 @@ import { planeFragment, planeVertex } from './shaders'
 const GAP = 5 // distance between photos along the corridor
 
 function Photo({ name, aspect, position, rotation, scale, camZ }) {
-  const mat = useRef(null)
   const [tex, setTex] = useState(null)
   useEffect(() => {
     let alive = true
@@ -38,8 +37,13 @@ function Photo({ name, aspect, position, rotation, scale, camZ }) {
     [w, h],
   )
 
+  const material = useMemo(
+    () => new THREE.ShaderMaterial({ vertexShader: planeVertex, fragmentShader: planeFragment, uniforms, transparent: true, depthWrite: false }),
+    [uniforms],
+  )
+  useEffect(() => () => material.dispose(), [material])
+
   useFrame(() => {
-    if (!mat.current) return
     uniforms.uMap.value = tex
     const dz = position[2] - camZ.current // negative: in front of the camera
     // Fade in from the distance, fade out as the photo passes the camera
@@ -53,7 +57,7 @@ function Photo({ name, aspect, position, rotation, scale, camZ }) {
   return (
     <mesh position={position} rotation={rotation}>
       <planeGeometry args={[w, h, 24, 1]} />
-      <shaderMaterial ref={mat} vertexShader={planeVertex} fragmentShader={planeFragment} uniforms={uniforms} transparent depthWrite={false} />
+      <primitive object={material} attach="material" />
     </mesh>
   )
 }
@@ -67,13 +71,13 @@ function World({ photos, progressRef, mobile }) {
     () =>
       photos.map((p, i) => {
         const side = i % 2 === 0 ? -1 : 1
-        const x = side * (mobile ? 0.55 + (i % 3) * 0.12 : 1.55 + (i % 3) * 0.35)
+        const x = side * (mobile ? 0.45 + (i % 3) * 0.1 : 1.55 + (i % 3) * 0.35)
         const y = ((i * 37) % 5 - 2) * (mobile ? 0.28 : 0.32)
         return {
           ...p,
           position: [x, y, -i * GAP],
           rotation: [0, -side * (mobile ? 0.1 : 0.22), 0],
-          scale: mobile ? 1.55 : 2.1,
+          scale: mobile ? 1.15 : 2.1,
         }
       }),
     [photos, mobile],

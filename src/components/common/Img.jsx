@@ -22,7 +22,7 @@ export default function Img({ name, alt, sizes = '100vw', priority = false, clas
       alt={alt ?? meta.alt}
       loading={priority ? 'eager' : 'lazy'}
       decoding={priority ? 'sync' : 'async'}
-      fetchpriority={priority ? 'high' : undefined}
+      fetchPriority={priority ? 'high' : undefined}
       className={cn('h-full w-full object-cover', imgClassName)}
       style={position ? { objectPosition: position } : undefined}
       {...rest}

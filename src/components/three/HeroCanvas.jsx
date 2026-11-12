@@ -54,6 +54,14 @@ function TransitionPlane({ slides, index, textures, pointer, origin, onReady }) 
     [],
   )
 
+  // Create the material once and mutate its own uniforms every frame.
+  // (Passing `uniforms` as a JSX prop lets R3F copy them, so updates would be lost.)
+  const material = useMemo(
+    () => new THREE.ShaderMaterial({ vertexShader: fullscreenVertex, fragmentShader: heroFragment, uniforms, depthWrite: false, depthTest: false }),
+    [uniforms],
+  )
+  useEffect(() => () => material.dispose(), [material])
+
   // Start a transition whenever the active index changes
   useEffect(() => {
     const s = state.current
@@ -102,7 +110,7 @@ function TransitionPlane({ slides, index, textures, pointer, origin, onReady }) 
   return (
     <mesh frustumCulled={false}>
       <planeGeometry args={[2, 2]} />
-      <shaderMaterial vertexShader={fullscreenVertex} fragmentShader={heroFragment} uniforms={uniforms} depthWrite={false} depthTest={false} />
+      <primitive object={material} attach="material" />
     </mesh>
   )
 }
