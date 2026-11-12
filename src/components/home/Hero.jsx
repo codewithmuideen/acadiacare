@@ -9,10 +9,11 @@ import { company, primaryPhone } from '../../data/site'
 import { ease } from '../../lib/motion'
 import { cn } from '../../lib/cn'
 
+// Only sharp, well-lit photos where faces are in focus
 const SLIDES = [
-  { name: 'carer-embrace-wheelchair', position: '72% 40%' },
-  { name: 'carer-laughing-resident', position: '45% 40%' },
-  { name: 'carer-shared-laugh', position: '45% 35%' },
+  { name: 'carer-embrace-wheelchair', position: '70% 35%' },
+  { name: 'carer-shared-laugh', position: '45% 30%' },
+  { name: 'carer-leaning-resident', position: '55% 30%' },
 ]
 
 const SUPPORT = ['Dementia', 'Autism', 'Learning disabilities', 'Mental health', 'Brain trauma', 'Special needs']
@@ -24,6 +25,31 @@ const STATS = [
 ]
 
 const AUTOPLAY_MS = 6000
+
+function SupportList({ tone }) {
+  const dark = tone === 'dark'
+  return (
+    <>
+      <p className={cn('mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em]', dark ? 'text-white/90' : 'text-brand-strong')}>
+        <HeartHandshake className="h-4 w-4" aria-hidden="true" />
+        Who we support
+      </p>
+      <ul className="flex flex-wrap gap-2">
+        {SUPPORT.map((s) => (
+          <li
+            key={s}
+            className={cn(
+              'rounded-full px-3 py-1.5 text-xs font-medium sm:text-[0.8rem]',
+              dark ? 'bg-white/90 text-ink shadow-sm backdrop-blur' : 'bg-brand-tint text-ink',
+            )}
+          >
+            {s}
+          </li>
+        ))}
+      </ul>
+    </>
+  )
+}
 
 export default function Hero() {
   const reduce = useReducedMotion()
@@ -113,74 +139,71 @@ export default function Hero() {
 
         {/* Visual */}
         <motion.div
-          className="relative mx-auto w-full max-w-[34rem] px-3 pb-10 pt-6 sm:px-6 lg:col-span-6 lg:max-w-none lg:pl-10 lg:pr-0"
+          className="relative mx-auto w-full max-w-[36rem] px-2 pt-4 sm:px-6 lg:col-span-6 lg:max-w-none lg:pb-10 lg:pl-10 lg:pr-0 lg:pt-6"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: reduce ? 0.3 : 1.1, ease, delay: 0.2 }}
         >
-          {/* Tilted gradient panel behind the photo */}
-          <div
-            aria-hidden="true"
-            className="absolute inset-x-0 bottom-2 top-12 rotate-[-4deg] rounded-[2.75rem] bg-gradient-to-br from-brand via-brand-strong to-brand-deep opacity-90 lg:left-6"
-          />
+          <div className="relative">
+            {/* Tilted gradient panel behind the photo */}
+            <div
+              aria-hidden="true"
+              className="absolute -inset-x-1 -bottom-3 top-8 rotate-[-3deg] rounded-[2.5rem] bg-gradient-to-br from-brand via-brand-strong to-brand-deep opacity-90 lg:-left-4 lg:-right-2 lg:top-12"
+            />
 
-          {/* Photo */}
-          <div className="relative aspect-[4/5] overflow-hidden rounded-[2.25rem] border-[6px] border-white bg-sand shadow-[0_40px_80px_-30px_rgb(31_26_23/0.45)] lg:aspect-auto lg:h-[min(76svh,680px)]">
-            <AnimatePresence initial={false}>
-              <motion.div
-                key={SLIDES[index].name}
-                className="absolute inset-0"
-                initial={{ opacity: 0, scale: 1.04 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 1.2, ease }}
-              >
-                <Img name={SLIDES[index].name} priority={index === 0} sizes="(min-width: 1024px) 46vw, 92vw" position={SLIDES[index].position} />
-              </motion.div>
-            </AnimatePresence>
-            <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-ink/55 to-transparent" />
+            {/* Photo: wide on phones so faces stay in frame, tall on desktop */}
+            <div className="relative aspect-[5/4] overflow-hidden rounded-[2rem] border-[5px] border-white bg-sand shadow-[0_40px_80px_-30px_rgb(31_26_23/0.45)] lg:aspect-auto lg:h-[min(76svh,680px)] lg:rounded-[2.25rem] lg:border-[6px]">
+              <AnimatePresence initial={false}>
+                <motion.div
+                  key={SLIDES[index].name}
+                  className="absolute inset-0"
+                  initial={{ opacity: 0, scale: 1.04 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 1.2, ease }}
+                >
+                  <Img name={SLIDES[index].name} priority={index === 0} sizes="(min-width: 1024px) 46vw, 92vw" position={SLIDES[index].position} />
+                </motion.div>
+              </AnimatePresence>
 
-            {/* Who we support */}
-            <div className="absolute inset-x-4 bottom-4 sm:inset-x-6 sm:bottom-6">
-              <p className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-white/90">
-                <HeartHandshake className="h-4 w-4" aria-hidden="true" />
-                Who we support
-              </p>
-              <ul className="flex flex-wrap gap-2">
-                {SUPPORT.map((s) => (
-                  <li key={s} className="rounded-full bg-white/90 px-3 py-1.5 text-xs font-medium text-ink shadow-sm backdrop-blur sm:text-[0.8rem]">
-                    {s}
-                  </li>
+              {/* Who we support (desktop: over the photo) */}
+              <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 hidden h-1/2 bg-gradient-to-t from-ink/55 to-transparent lg:block" />
+              <div className="absolute inset-x-6 bottom-6 hidden lg:block">
+                <SupportList tone="dark" />
+              </div>
+
+              {/* Slide dots */}
+              <div className="absolute right-4 top-4 flex gap-1.5 rounded-full bg-ink/25 px-2 py-1.5 backdrop-blur-sm" aria-hidden="true">
+                {SLIDES.map((s, i) => (
+                  <span key={s.name} className={cn('h-1.5 rounded-full bg-white transition-all duration-500', i === index ? 'w-5' : 'w-1.5 opacity-60')} />
                 ))}
-              </ul>
+              </div>
             </div>
 
-            {/* Slide dots */}
-            <div className="absolute right-5 top-5 flex gap-1.5" aria-hidden="true">
-              {SLIDES.map((s, i) => (
-                <span key={s.name} className={cn('h-1.5 rounded-full bg-white transition-all duration-500', i === index ? 'w-6' : 'w-1.5 opacity-60')} />
-              ))}
-            </div>
+            {/* Floating: CQC */}
+            <motion.div {...appear(0.9, 12)} className="absolute -top-5 left-3 sm:left-5 lg:-left-6 lg:top-24">
+              <CqcBadge variant="compact" />
+            </motion.div>
+
+            {/* Floating: DBS */}
+            <motion.div
+              {...appear(1.05, 12)}
+              className="absolute -bottom-6 right-3 flex items-center gap-3 rounded-2xl bg-white/95 py-2.5 pl-2.5 pr-4 shadow-[0_20px_50px_-20px_rgb(31_26_23/0.45)] ring-1 ring-ink/5 backdrop-blur sm:right-5 lg:bottom-auto lg:-right-6 lg:top-[42%]"
+            >
+              <span className="grid h-10 w-10 place-items-center rounded-xl bg-emerald-50 text-emerald-600">
+                <BadgeCheck className="h-5 w-5" aria-hidden="true" />
+              </span>
+              <span className="leading-tight">
+                <span className="block text-sm font-semibold text-ink">Enhanced DBS checked</span>
+                <span className="block text-xs text-muted">Every carer vetted</span>
+              </span>
+            </motion.div>
           </div>
 
-          {/* Floating: CQC */}
-          <motion.div {...appear(0.9, 12)} className="absolute -left-1 top-16 sm:left-0 lg:-left-6 lg:top-24">
-            <CqcBadge variant="compact" />
-          </motion.div>
-
-          {/* Floating: DBS */}
-          <motion.div
-            {...appear(1.05, 12)}
-            className="absolute -right-1 top-[42%] flex items-center gap-3 rounded-2xl bg-white/95 py-2.5 pl-2.5 pr-4 shadow-[0_20px_50px_-20px_rgb(31_26_23/0.45)] ring-1 ring-ink/5 backdrop-blur sm:right-0 lg:-right-6"
-          >
-            <span className="grid h-10 w-10 place-items-center rounded-xl bg-emerald-50 text-emerald-600">
-              <BadgeCheck className="h-5 w-5" aria-hidden="true" />
-            </span>
-            <span className="leading-tight">
-              <span className="block text-sm font-semibold text-ink">Enhanced DBS checked</span>
-              <span className="block text-xs text-muted">Every carer vetted</span>
-            </span>
-          </motion.div>
+          {/* Who we support (phones/tablets: below the photo, nothing covers faces) */}
+          <div className="mt-12 rounded-2xl border border-ink/5 bg-white/85 p-5 shadow-[0_12px_30px_-20px_rgb(31_26_23/0.3)] backdrop-blur lg:hidden">
+            <SupportList tone="light" />
+          </div>
         </motion.div>
       </Container>
     </section>
