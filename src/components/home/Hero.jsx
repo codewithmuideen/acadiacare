@@ -1,11 +1,12 @@
 import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
-import { ChevronLeft, ChevronRight, Pause, Phone, Play, ShieldCheck } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Pause, Phone, Play } from 'lucide-react'
 import Container from '../common/Container'
 import Button from '../common/Button'
 import SplitText from '../common/SplitText'
 import Img from '../common/Img'
 import Glass from '../common/Glass'
+import CqcBadge from '../common/CqcBadge'
 import { primaryPhone } from '../../data/site'
 import { ease } from '../../lib/motion'
 import { cn } from '../../lib/cn'
@@ -200,7 +201,7 @@ export default function Hero() {
             inView={false}
             delay={0.12}
             stagger={0.07}
-            className="text-display-xl text-ink"
+            className="text-display-xl !leading-[1.04] text-ink"
             parts={[{ text: 'Care that', break: true }, { text: 'puts' }, { text: 'people', className: 'italic text-brand-strong' }, { text: 'first.' }]}
           />
           <motion.p className="lede mt-8 max-w-lg" {...appear(0.55)}>
@@ -215,9 +216,10 @@ export default function Hero() {
               Talk to our team
             </Button>
           </motion.div>
-          <motion.div className="mt-12 flex flex-col gap-5 border-t border-ink/10 pt-8 text-sm sm:flex-row sm:items-center sm:gap-10" {...appear(0.85)}>
-            <a href={primaryPhone.href} className="group flex items-center gap-3">
-              <span className="grid h-11 w-11 place-items-center rounded-full bg-ink text-cream transition-colors group-hover:bg-brand-strong">
+          <motion.div className="mt-10 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:gap-6" {...appear(0.85)}>
+            <CqcBadge />
+            <a href={primaryPhone.href} className="group flex items-center gap-3 px-1">
+              <span className="grid h-12 w-12 place-items-center rounded-full bg-ink text-cream transition-colors group-hover:bg-brand-strong">
                 <Phone className="h-4 w-4" aria-hidden="true" />
               </span>
               <span>
@@ -225,15 +227,6 @@ export default function Hero() {
                 <span className="font-semibold text-ink">{primaryPhone.label}</span>
               </span>
             </a>
-            <p className="flex items-center gap-3">
-              <span className="grid h-11 w-11 place-items-center rounded-full border border-ink/10 bg-cream/50 text-steel-deep">
-                <ShieldCheck className="h-5 w-5" aria-hidden="true" />
-              </span>
-              <span>
-                <span className="block text-xs uppercase tracking-[0.16em] text-muted">Regulated</span>
-                <span className="font-semibold text-ink">Registered with the CQC</span>
-              </span>
-            </p>
           </motion.div>
         </div>
 
