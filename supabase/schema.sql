@@ -120,3 +120,12 @@ drop policy if exists "applications admin read" on storage.objects;
 create policy "applications admin read" on storage.objects for select to authenticated using (bucket_id = 'applications' and public.is_admin());
 drop policy if exists "applications admin delete" on storage.objects;
 create policy "applications admin delete" on storage.objects for delete to authenticated using (bucket_id = 'applications' and public.is_admin());
+
+-- ---------- Server (service_role) access ----------
+-- The website's API (/api/contact, /api/application) uses the secret key.
+-- Some projects do not grant service_role table access automatically.
+grant usage on schema public to service_role;
+grant all on all tables in schema public to service_role;
+grant all on all sequences in schema public to service_role;
+alter default privileges in schema public grant all on tables to service_role;
+alter default privileges in schema public grant all on sequences to service_role;
