@@ -1,80 +1,83 @@
-# Acadia Care website
+# Acadia Care website (v2)
 
 Rebuild of [acadiacare.co.uk](https://acadiacare.co.uk/) for Acadia Support Services Ltd.
-React 19, Vite 6, Tailwind CSS 3, React Router, Motion, GSAP, Lenis, React Three Fiber,
-ShaderGradient and liquid-glass-react.
 
-## Scripts
+- **Fast, crawlable HTML pages**: Home, About, Services, Careers (5-step application), Contact, Privacy, Terms, plus admin-created custom pages at `/p/<slug>`.
+- **Design**: brand pink `#df3fb6`, Playfair Display + Plus Jakarta Sans, Lucide icons (inlined at build time), Motion animations (respects reduced motion).
+- **Hero**: Acadia's own videos, cropped to a silent 16:9 loop (`public/assets/videos/hero-loop.mp4`); both full videos play in the "See the difference" section.
+- **Emails (Resend)**: every form emails the office and sends the visitor a confirmation. Job applications attach a PDF summary + CV + documents.
+- **CMS (Supabase)**: sign in at `/admin`, then edit any page in place (text, links, images, videos, hide/show sections, menu, contact settings) and click **Save**. Changes are live instantly.
+
+## Stack
+
+Vite (multi-page, vanilla JS) · Motion · Lucide · Supabase (Postgres, Auth, Storage) · Resend · Vercel serverless functions (`/api`) · pdf-lib.
+
+## Local development
 
 ```bash
 npm install
-npm run dev       # local dev server
-npm run build     # production build to /dist
-npm run preview   # serve the production build
-npm run images    # regenerate WebP renditions + icons from /assets
+cp .env.example .env   # fill in the keys
+npm run dev            # site + /api functions on http://localhost:5173
+npm run build          # production build → dist/
 ```
 
-## Pages
+## One-time setup
 
-| Route | Page |
-| --- | --- |
-| `/` | Home |
-| `/about-acadia-care` | About |
-| `/services` | Services (anchors: `#residential-care-support`, `#domiciliary-care`, `#staffing-queries`) |
-| `/application` | Careers + 8-step application wizard |
-| `/contact-acadia-care` | Contact (supports `?subject=staffing|residential|domiciliary|recruitment`) |
-| `/privacy-policy`, `/terms-and-conditions` | Legal (original wording preserved) |
-| anything else | Custom 404 |
+### 1. Supabase
+1. Dashboard → **SQL Editor** → paste `supabase/schema.sql` → **Run**. This creates the tables, security rules (RLS), storage buckets (`media` public, `applications` private) and makes `care@acadiacare.co.uk` an admin.
+2. Dashboard → **Authentication → URL Configuration**: set Site URL to `https://acadiacare.co.uk` and add `https://acadiacare.co.uk/admin` to Redirect URLs (for password reset emails).
+3. The admin login is the Supabase Auth user `care@acadiacare.co.uk`. Forgot the password? Use "Forgot password?" on `/admin`.
+4. More admins: create the user in Authentication → Users, then add their email to the `admins` table.
 
-## Structure
+### 2. Resend
+1. resend.com → **Domains** → `acadiacare.co.uk` → add the DNS records shown (SPF, DKIM, MX for `send.`) at your domain registrar, then click **Verify**.
+2. Until the domain is verified, emails fall back to Resend's test sender, which can only deliver to the Resend account owner's inbox (applicant/visitor confirmations will not arrive).
+
+### 3. Vercel environment variables
+Project → Settings → Environment Variables (Production + Preview):
+
+| Name | Value | Exposed to browser? |
+| --- | --- | --- |
+| `VITE_SUPABASE_URL` | `https://<project>.supabase.co` | yes (public) |
+| `VITE_SUPABASE_ANON_KEY` | Supabase publishable key | yes (public, RLS-protected) |
+| `SUPABASE_URL` | same URL | no |
+| `SUPABASE_SERVICE_ROLE_KEY` | Supabase **secret** key | **no, server only** |
+| `RESEND_API_KEY` | Resend API key | **no, server only** |
+| `RESEND_FROM` | `Acadia Care <website@acadiacare.co.uk>` | no |
+| `ADMIN_EMAIL` | `care@acadiacare.co.uk` | no |
+| `SITE_URL` | `https://acadiacare.co.uk` | no |
+| `ALLOWED_ORIGIN` | `https://acadiacare.co.uk,https://www.acadiacare.co.uk` (optional) | no |
+
+Redeploy after adding them (the `VITE_` values are baked in at build time).
+
+## How the CMS works
+
+- Each section has `data-s="<scope>"`. Editable text, images and videos inside it are keyed automatically (`home-hero:t1`, `home-about:i0`…). Saved overrides store a hash of the original content, so if a developer later edits the HTML, an old override can never land on the wrong element.
+- Content lives in `site_content` (`global` = header/footer/menu/settings, `page:<name>` = page edits). Only admins can write (RLS); everyone can read.
+- Visitors get the HTML defaults instantly (good for SEO) and live edits are applied on load (cached in the browser for speed).
+- Elements with `data-set` / `data-link` (phone, email, WhatsApp, socials) are driven by **Site settings**.
+
+## Application flow (security)
+
+1. Browser uploads CV/documents straight to the **private** `applications` bucket (visitors can upload to `incoming/` but never read anything back).
+2. `/api/application` validates the data, downloads the files with the server key, builds a PDF summary, saves the row, then emails care@ (PDF + CV + documents attached, reply-to = applicant) and emails the applicant a confirmation with their PDF.
+3. Admins see every application under **Dashboard → Applications** and download documents via short-lived signed links.
+
+## Project structure
 
 ```
-src/
-  components/
-    common/   Button, Img (responsive WebP), Glass (liquid glass), Seo, Reveal, SplitText, Faq...
-    layout/   Navbar, MobileMenu, Footer, MobileCTA, PageTransition, Layout
-    home/     Hero, Introduction, AboutPreview, ServicesOverview, WhyChooseUs,
-              CareApproach, ScrollWorld, StaffingCTA, CareersCTA, ContactSection
-    three/    HeroCanvas (R3F shader transitions), HeroGradient (ShaderGradient),
-              ScrollWorldCanvas (scroll-driven 3D corridor), shaders.js
-    forms/    ContactForm, Field components, ApplicationWizard + steps/
-  data/       site.js (all copy), application.js (form questions), images.js
-  lib/        schemas, API helper, application schema + submission guard
-api/          Serverless functions (Resend email for non-sensitive enquiries)
-docs/         RESEND-INTEGRATION.md, SECURE-APPLICATION-SUBMISSION.md
+index.html, about/, services/, careers/, contact/, privacy-policy/, terms/, page/, admin/, 404.html
+partials/        shared nav, footer, logo, WhatsApp widget, contact form (injected at build)
+src/css/         main.css (site), editor.css (editor + admin UI), admin.css
+src/js/          main, cms, motion, forms, application, editor, admin, admin-ui, sanitize, config
+api/             contact.js, application.js, _lib/ (http, resend, supabase, pdf, templates)
+supabase/        schema.sql
+public/assets/   images (WebP), videos, brand
 ```
 
-## Design system
+## Before launch
 
-Brand colours come from the existing identity and are defined as CSS variables in
-`src/styles/index.css`: logo magenta `#ED38B3`, an accessible deeper magenta `#B01F80`
-for text and buttons (AA contrast), the original site rose `#EA5478`, and the monogram's
-steel blue `#4682B4`, on warm neutrals. Typography: Cormorant Garamond + Manrope.
-
-## Motion and 3D
-
-- **Hero**: five photos on a WebGL plane. Each change is a noise-shaped liquid wavefront
-  (chromatic edge, brand-tinted glow) blooming from the click point or a varied spot.
-  Includes cursor lens, swipe, liquid-glass caption + navigator, pause control, progress ring.
-  The first photo is a regular `<img>` for fast LCP; WebGL mounts after idle.
-- **ShaderGradient** backdrop behind the hero (uses scene lights, no external HDR downloads).
-- **Scroll world**: sticky R3F canvas; native scroll moves the camera through ten photos
-  that shift from monochrome to colour. No scroll hijacking.
-- **Reduced motion** users get a calm crossfade hero and a static gallery, no WebGL.
-- `three` is pinned to 0.169.0 because ShaderGradient's shaders require it.
-
-## Before launch: action list for the client
-
-1. **Resend**: set the environment variables in `docs/RESEND-INTEGRATION.md`.
-2. **Applications**: build the secure backend in `docs/SECURE-APPLICATION-SUBMISSION.md`.
-   Until then the form clearly says applications are not sent and offers phone/email.
-3. **Privacy policy**: the original wording (preserved) references the Data Protection Act 1998.
-   Have it updated for UK GDPR / DPA 2018, Resend, and recruitment data.
-4. **Stafford address**: not published on the old site, so it is not shown. Add it to
-   `src/data/site.js` if it should appear (it would also enable LocalBusiness schema).
-5. **Images**: see `IMAGE_CREDITS.md`; replace stock with Acadia's own photography over time.
-
-## Deployment
-
-Vercel: framework preset Vite, build `npm run build`, output `dist`. `vercel.json` handles
-SPA rewrites, cache headers and security headers. The `/api` functions deploy automatically.
+- Verify `acadiacare.co.uk` in Resend (DNS).
+- Run `supabase/schema.sql`.
+- Replace the sample testimonials and stock photos with real ones (both editable in the admin).
+- Have the Privacy Policy and Terms reviewed.

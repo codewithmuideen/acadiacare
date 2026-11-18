@@ -1,6 +1,7 @@
-# Acadia Care — https://acadiacare.co.uk
+# Acadia Care
 User-agent: *
 Allow: /
 Disallow: /api/
+Disallow: /admin
 
 Sitemap: https://acadiacare.co.uk/sitemap.xml

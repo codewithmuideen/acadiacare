@@ -1,12 +1,12 @@
 {
   "name": "Acadia Care",
   "short_name": "Acadia Care",
-  "description": "Residential care support, domiciliary care and healthcare staffing in Staffordshire.",
+  "description": "CQC registered domiciliary care and healthcare staffing in Stafford, Staffordshire.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#F8F5F0",
-  "theme_color": "#B01F80",
+  "background_color": "#ffffff",
+  "theme_color": "#df3fb6",
   "lang": "en-GB",
   "icons": [
     {

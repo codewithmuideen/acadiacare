@@ -1,0 +1,26 @@
+<form class="js-contact-form" data-form-type="enquiry" novalidate>
+  <div class="fr">
+    <div class="fg"><label for="cf-name">Full Name <span class="req">*</span></label><input id="cf-name" type="text" name="name" required autocomplete="name" placeholder="Your full name" maxlength="100"></div>
+    <div class="fg"><label for="cf-phone">Phone <span class="req">*</span></label><input id="cf-phone" type="tel" name="phone" required autocomplete="tel" placeholder="07xxx xxxxxx" maxlength="20"></div>
+  </div>
+  <div class="fg"><label for="cf-email">Email <span class="req">*</span></label><input id="cf-email" type="email" name="email" required autocomplete="email" placeholder="you@example.com" maxlength="200"></div>
+  <div class="fg"><label for="cf-type">How can we help? <span class="req">*</span></label>
+    <select id="cf-type" name="type" required>
+      <option value="">Please select...</option>
+      <option value="care-self">I need care at home for myself</option>
+      <option value="care-family">I need care for a family member</option>
+      <option value="work">I am looking for work in care</option>
+      <option value="staffing">I need staffing for my organisation</option>
+      <option value="nhs-la">NHS or Local Authority enquiry</option>
+      <option value="general">Something else</option>
+    </select>
+  </div>
+  <div class="fg"><label for="cf-msg">Your message <span class="req">*</span></label><textarea id="cf-msg" name="message" required rows="5" maxlength="5000" placeholder="Tell us a bit about what you need..."></textarea></div>
+  <div class="hp" aria-hidden="true"><label for="cf-company">Company</label><input id="cf-company" type="text" name="company" tabindex="-1" autocomplete="off"></div>
+  <div class="fg fcheck">
+    <input type="checkbox" id="cf-consent" name="consent" required>
+    <label for="cf-consent">I am happy for Acadia Care to contact me about this enquiry. See our <a href="/privacy-policy">Privacy Policy</a>. <span class="req">*</span></label>
+  </div>
+  <div class="form-alert" role="status" aria-live="polite"></div>
+  <button type="submit" class="btn btn-pink btn-lg btn-block"><span>Send Message</span> <i data-lucide="send"></i></button>
+</form>
