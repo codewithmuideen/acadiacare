@@ -64,6 +64,19 @@ export function initApplication() {
     ;['dragleave', 'drop'].forEach((ev) => zone.addEventListener(ev, () => zone.classList.remove('drag')))
   })
 
+  // Vacancy list: click a role → jump to the form with that role selected
+  document.querySelectorAll('[data-role]').forEach((row) => row.addEventListener('click', (e) => {
+    if (document.documentElement.classList.contains('cms-editing')) return
+    e.preventDefault()
+    const sel = form.querySelector('select[name="role"]')
+    const opt = [...sel.options].find((o) => o.value === row.dataset.role || o.textContent === row.dataset.role)
+    if (opt) { sel.value = opt.value; sel.classList.remove('invalid') }
+    go(0)
+    document.getElementById('apply').scrollIntoView({ behavior: 'smooth', block: 'start' })
+    history.replaceState(null, '', '#apply')
+    setTimeout(() => form.querySelector('input[name="first_name"]')?.focus({ preventScroll: true }), 700)
+  }))
+
   const success = document.getElementById('appSuccess')
   form.addEventListener('submit', async (e) => {
     e.preventDefault()

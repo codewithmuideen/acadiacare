@@ -35,10 +35,10 @@ function hero() {
   if (items.length) show(items, { opacity: [0, 1], y: [22, 0] }, { duration: 0.9, delay: stagger(0.12, { startDelay: 0.15 }), ease: EASE })
   const media = document.querySelector('[data-hero-media]')
   if (media) {
-    animate(media, { opacity: [0, 1], scale: [1.08, 1] }, { duration: 1.6, ease: EASE })
+    animate(media.querySelector('.hero-phone'), { opacity: [0, 1], scale: [0.92, 1], rotate: [-3, 0] }, { duration: 1.4, delay: 0.3, ease: EASE })
     const heroEl = media.closest('.hero')
     if (window.innerWidth > 768) {
-      scroll(animate(media.querySelector('video, img'), { y: [0, 140], scale: [1, 1.08] }, { ease: 'linear' }), { target: heroEl, offset: ['start start', 'end start'] })
+      scroll(animate(media, { y: [0, 80] }, { ease: 'linear' }), { target: heroEl, offset: ['start start', 'end start'] })
     }
   }
   const em = document.querySelector('.hero h1 em')

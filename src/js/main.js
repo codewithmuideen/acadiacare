@@ -46,10 +46,42 @@ function initVideos() {
     })
     video.addEventListener('pause', () => { if (video.currentTime === 0 || video.ended) wrap.classList.remove('playing') })
   })
-  // Pause the hero loop when it is off screen (saves battery/data).
-  const hero = document.querySelector('.hero-video')
-  if (hero && 'IntersectionObserver' in window) {
-    new IntersectionObserver(([e]) => { if (e.isIntersecting) hero.play().catch(() => {}); else hero.pause() }).observe(hero)
+  initHeroVideo()
+}
+
+/* Hero: plays Acadia's videos back to back, with sound toggle and dots. */
+function initHeroVideo() {
+  const video = document.querySelector('.hero-video')
+  if (!video) return
+  const list = (video.dataset.playlist || '').split(',').map((s) => s.trim()).filter(Boolean)
+  const dots = [...document.querySelectorAll('.hero-dots button')]
+  const sound = document.querySelector('.hero-sound')
+  const current = () => list.indexOf(new URL(video.querySelector('source')?.src || video.currentSrc, location.href).pathname)
+  const playIndex = (i) => {
+    const src = list[i]
+    if (!src) return
+    const source = video.querySelector('source')
+    if (source) source.src = src; else video.src = src
+    video.poster = src.replace(/\.mp4$/, '-poster.jpg')
+    video.load()
+    video.play().catch(() => {})
+    dots.forEach((d, n) => d.classList.toggle('on', n === i))
+  }
+  video.addEventListener('ended', () => {
+    const i = current()
+    if (i === -1 || list.length < 2) { video.currentTime = 0; video.play().catch(() => {}); return } // replaced in the CMS: just loop
+    playIndex((i + 1) % list.length)
+  })
+  dots.forEach((d) => d.addEventListener('click', () => playIndex(Number(d.dataset.i))))
+  if (list.length < 2) dots.forEach((d) => { d.hidden = true })
+  sound?.addEventListener('click', () => {
+    video.muted = !video.muted
+    if (!video.muted) video.play().catch(() => {})
+    sound.setAttribute('aria-pressed', String(!video.muted))
+    sound.setAttribute('aria-label', video.muted ? 'Turn sound on' : 'Turn sound off')
+  })
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(([e]) => { if (e.isIntersecting) video.play().catch(() => {}); else video.pause() }).observe(video)
   }
 }
 
