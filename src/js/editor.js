@@ -70,6 +70,7 @@ function setDirty(v = true) {
 /* ------------------------------ edit mode ------------------------------ */
 function setEditing(on) {
   editing = on
+  if (on) window.__acadiaUnsplit?.() // restore word-animated headings to plain text before editing
   sessionStorage.setItem('acadia-edit', on ? '1' : '0')
   html.classList.toggle('cms-editing', on)
   bar.querySelector('[data-a="edit"] span').textContent = on ? 'Done editing' : 'Edit page'
