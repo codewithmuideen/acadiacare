@@ -49,40 +49,61 @@ function initVideos() {
   initHeroVideo()
 }
 
-/* Hero: plays Acadia's videos back to back, with sound toggle and dots. */
+/* Hero: cinematic background video + "Watch our films" lightbox (full videos, with sound). */
 function initHeroVideo() {
-  const video = document.querySelector('.hero-video')
-  if (!video) return
-  const list = (video.dataset.playlist || '').split(',').map((s) => s.trim()).filter(Boolean)
-  const dots = [...document.querySelectorAll('.hero-dots button')]
-  const sound = document.querySelector('.hero-sound')
-  const current = () => list.indexOf(new URL(video.querySelector('source')?.src || video.currentSrc, location.href).pathname)
-  const playIndex = (i) => {
-    const src = list[i]
-    if (!src) return
-    const source = video.querySelector('source')
-    if (source) source.src = src; else video.src = src
-    video.poster = src.replace(/\.mp4$/, '-poster.jpg')
-    video.load()
+  const bg = document.querySelector('.hero-video')
+  if (bg && 'IntersectionObserver' in window) {
+    new IntersectionObserver(([e]) => { if (e.isIntersecting) bg.play().catch(() => {}); else bg.pause() }).observe(bg)
+  }
+  const triggers = document.querySelectorAll('[data-film]')
+  if (!triggers.length) return
+  const box = document.createElement('div')
+  box.className = 'film-box'
+  box.setAttribute('role', 'dialog')
+  box.setAttribute('aria-modal', 'true')
+  box.setAttribute('aria-label', 'Acadia Care film')
+  box.hidden = true
+  box.innerHTML = '<div class="film-inner"><button class="film-close" type="button" aria-label="Close video"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button><video controls playsinline></video><div class="film-tabs"></div></div>'
+  document.body.appendChild(box)
+  const video = box.querySelector('video')
+  const tabs = box.querySelector('.film-tabs')
+  const films = [...triggers].filter((t) => t.dataset.film && t.dataset.filmTitle)
+  const unique = [...new Map(films.map((t) => [t.dataset.film, t])).values()]
+  tabs.innerHTML = unique.map((t, i) => `<button type="button" data-i="${i}">${t.dataset.filmTitle}</button>`).join('')
+  let last = null
+  const play = (src, poster) => {
+    video.src = src
+    if (poster) video.poster = poster
     video.play().catch(() => {})
-    dots.forEach((d, n) => d.classList.toggle('on', n === i))
+    tabs.querySelectorAll('button').forEach((b, i) => b.classList.toggle('on', unique[i].dataset.film === src))
   }
+  const open = (t) => {
+    last = document.activeElement
+    box.hidden = false
+    document.documentElement.classList.add('film-open')
+    bg?.pause()
+    play(t.dataset.film, t.dataset.filmPoster)
+    box.querySelector('.film-close').focus()
+  }
+  const close = () => {
+    video.pause()
+    box.hidden = true
+    document.documentElement.classList.remove('film-open')
+    bg?.play().catch(() => {})
+    last?.focus?.()
+  }
+  triggers.forEach((t) => t.addEventListener('click', (e) => {
+    if (document.documentElement.classList.contains('cms-editing')) return
+    e.preventDefault()
+    open(t.dataset.film ? t : unique[0])
+  }))
+  tabs.addEventListener('click', (e) => { const b = e.target.closest('[data-i]'); if (b) { const t = unique[+b.dataset.i]; play(t.dataset.film, t.dataset.filmPoster) } })
   video.addEventListener('ended', () => {
-    const i = current()
-    if (i === -1 || list.length < 2) { video.currentTime = 0; video.play().catch(() => {}); return } // replaced in the CMS: just loop
-    playIndex((i + 1) % list.length)
+    const i = unique.findIndex((t) => t.dataset.film === video.getAttribute('src'))
+    if (i > -1 && i < unique.length - 1) play(unique[i + 1].dataset.film, unique[i + 1].dataset.filmPoster)
   })
-  dots.forEach((d) => d.addEventListener('click', () => playIndex(Number(d.dataset.i))))
-  if (list.length < 2) dots.forEach((d) => { d.hidden = true })
-  sound?.addEventListener('click', () => {
-    video.muted = !video.muted
-    if (!video.muted) video.play().catch(() => {})
-    sound.setAttribute('aria-pressed', String(!video.muted))
-    sound.setAttribute('aria-label', video.muted ? 'Turn sound on' : 'Turn sound off')
-  })
-  if ('IntersectionObserver' in window) {
-    new IntersectionObserver(([e]) => { if (e.isIntersecting) video.play().catch(() => {}); else video.pause() }).observe(video)
-  }
+  box.addEventListener('click', (e) => { if (e.target === box || e.target.closest('.film-close')) close() })
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !box.hidden) close() })
 }
 
 /* ---------- custom CMS pages (/p/slug or /page?p=slug) ---------- */

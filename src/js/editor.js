@@ -197,7 +197,7 @@ function renderHandles() {
       it.el.load(); if (it.el.autoplay) it.el.play().catch(() => {})
       setDirty()
     }
-    place(b, it.el.closest('.hero-phone, .vid-thumb') || it.el)
+    place(b, it.el.closest('.hero-bg, .vid-thumb') || it.el)
   })
   reg.sections.filter((s) => !isGlobalScope(s.scope)).forEach((s) => {
     const hidden = s.el.hasAttribute('data-cms-hidden')
