@@ -1,29 +1,25 @@
 {
-  "name": "Acadia Care",
+  "id": "/",
+  "name": "Acadia Care | Home Care in Stafford",
   "short_name": "Acadia Care",
-  "description": "CQC registered domiciliary care and healthcare staffing in Stafford, Staffordshire.",
-  "start_url": "/",
+  "description": "CQC registered home care, live-in care, dementia care and healthcare staffing in Stafford and across Staffordshire.",
+  "lang": "en-GB",
+  "dir": "ltr",
+  "start_url": "/?source=pwa",
   "scope": "/",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#ffffff",
   "theme_color": "#df3fb6",
-  "lang": "en-GB",
+  "categories": ["health", "medical", "lifestyle"],
   "icons": [
-    {
-      "src": "/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    },
-    {
-      "src": "/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
-    }
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ],
+  "shortcuts": [
+    { "name": "Request care", "url": "/contact", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Apply for a job", "url": "/careers#apply", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] }
   ]
 }

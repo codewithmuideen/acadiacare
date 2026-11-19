@@ -6,7 +6,6 @@ Served from `/public/assets/images/hq` as WebP (max 1600px, uncropped).
 
 | File | Used on | Unsplash page |
 | --- | --- | --- |
-| warm-embrace-gentleman.webp | About: story | https://unsplash.com/photos/mens-white-button-up-shirt-lK0l9pzxLps |
 | holding-hands-close.webp | About: header background | https://unsplash.com/photos/a-person-sitting-on-a-bench-holding-their-hands-together-upzvTKNliRM |
 | hands-reassurance.webp | Services: header background | https://unsplash.com/photos/person-wearing-gold-wedding-band-BxXgTQEw1M4 |
 | doctor-home-visit-sofa.webp | Services: Domiciliary care | https://unsplash.com/photos/doctor-talks-with-an-elderly-patient-on-a-couch-BUNNEclz-yQ |
@@ -18,17 +17,18 @@ Served from `/public/assets/images/hq` as WebP (max 1600px, uncropped).
 
 ## Client-supplied images
 
-Provided by Acadia Care (care0–care8 uploads), served from `/public/assets/images/hq` at native size, shown uncropped.
+Provided by Acadia Care (care / caring uploads), served from `/public/assets/images/hq` at native size, shown uncropped.
 
 | File | Used on |
 | --- | --- |
-| carer-home-gentleman.webp | Home: Who we are |
+| carer-hug-laughing-lady.webp | Home: Who we are |
 | carer-care-plan-lady.webp | Home: How we care 01 |
 | carer-tablet-chat.webp | Home: How we care 02 |
 | carer-walking-frame.webp | Home: How we care 03 |
-| doctor-stethoscope-home.webp | Home: How we care 04 |
+| clinician-notes-gentleman.webp | Home: How we care 04 |
 | carer-table-gentleman.webp | Home: How we care 05 |
 | care-team-hospital.webp | Home: Staffing |
+| carer-walking-gentleman.webp | About: story |
 
 ## Video
 

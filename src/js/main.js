@@ -124,6 +124,17 @@ async function initCustomPage() {
     document.title = `${page.title} | Acadia Care`
     const meta = document.querySelector('meta[name="description"]')
     if (meta && page.meta_description) meta.content = page.meta_description
+    // SEO: canonical + social tags for this custom page
+    const setTag = (selector, create, attr, value) => {
+      let el = document.head.querySelector(selector)
+      if (!el) { el = document.createElement(create.tag); Object.entries(create.attrs).forEach(([k, v]) => el.setAttribute(k, v)); document.head.appendChild(el) }
+      el.setAttribute(attr, value)
+    }
+    const canonical = `https://acadiacare.co.uk/p/${slug}`
+    setTag('link[rel="canonical"]', { tag: 'link', attrs: { rel: 'canonical' } }, 'href', canonical)
+    setTag('meta[property="og:url"]', { tag: 'meta', attrs: { property: 'og:url' } }, 'content', canonical)
+    setTag('meta[property="og:title"]', { tag: 'meta', attrs: { property: 'og:title' } }, 'content', `${page.title} | Acadia Care`)
+    if (page.meta_description) setTag('meta[property="og:description"]', { tag: 'meta', attrs: { property: 'og:description' } }, 'content', page.meta_description)
     title.textContent = page.title
     document.getElementById('cpCrumb').textContent = page.title
     document.getElementById('cpIntro').textContent = page.intro || ''

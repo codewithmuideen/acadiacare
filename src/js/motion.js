@@ -26,8 +26,8 @@ const editing = () => document.documentElement.classList.contains('cms-editing')
 
 function revealOffsets(el) {
   switch (el.dataset.reveal) {
-    case 'left': return { x: [-40, 0] }
-    case 'right': return { x: [40, 0] }
+    case 'left': return window.innerWidth < 1025 ? { y: [34, 0] } : { x: [-40, 0] }
+    case 'right': return window.innerWidth < 1025 ? { y: [34, 0] } : { x: [40, 0] }
     case 'zoom': return { scale: [0.92, 1] }
     default: return { y: [34, 0] }
   }
@@ -163,6 +163,15 @@ function tilt() {
       card.style.transform = `perspective(900px) rotateX(${(-y * 5).toFixed(2)}deg) rotateY(${(x * 6).toFixed(2)}deg) translateY(-6px)`
     })
     card.addEventListener('pointerleave', () => { card.style.transform = '' })
+  })
+  // Soft pink glow that follows the cursor across cards
+  document.querySelectorAll('.svc-card, .why-card, .vc, .sccard').forEach((card) => {
+    card.addEventListener('pointermove', (e) => {
+      const r = card.getBoundingClientRect()
+      card.style.setProperty('--mx', `${e.clientX - r.left}px`)
+      card.style.setProperty('--my', `${e.clientY - r.top}px`)
+    })
+    card.addEventListener('pointerleave', () => { card.style.setProperty('--my', '-40%') })
   })
 }
 

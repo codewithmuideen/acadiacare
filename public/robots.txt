@@ -1,7 +1,17 @@
-# Acadia Care
+# Acadia Care — https://acadiacare.co.uk
 User-agent: *
 Allow: /
+Disallow: /admin
 Disallow: /api/
+Disallow: /page/
+
+# Search engine and AI crawlers are welcome on public pages
+User-agent: Googlebot
+Allow: /
+Disallow: /admin
+
+User-agent: Bingbot
+Allow: /
 Disallow: /admin
 
 Sitemap: https://acadiacare.co.uk/sitemap.xml
