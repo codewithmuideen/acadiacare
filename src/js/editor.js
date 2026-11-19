@@ -182,6 +182,7 @@ function renderHandles() {
       const r = await pickMedia(sb, { kind: 'image', src: it.el.getAttribute('src'), alt: it.el.alt })
       if (!r) return
       it.el.src = r.src; it.el.removeAttribute('srcset'); it.el.alt = r.alt
+      it.el.closest('.fit-frame')?.style.setProperty('--bg', `url('${r.src}')`)
       setDirty()
     }
     place(b, it.el.classList.contains('ph-bg') ? it.el.parentElement : it.el)

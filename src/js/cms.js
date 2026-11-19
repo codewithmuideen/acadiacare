@@ -126,6 +126,7 @@ function applyBlocks(blocks = {}) {
     const o = blocks[item.key]
     if (!o || o.o !== hash(item.orig) || !safeUrl(o.src)) continue
     item.el.src = o.src
+    item.el.closest('.fit-frame')?.style.setProperty('--bg', `url('${o.src}')`)
     item.el.removeAttribute('srcset')
     if (o.alt !== undefined) item.el.alt = o.alt
   }
