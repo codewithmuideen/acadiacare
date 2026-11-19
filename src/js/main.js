@@ -136,7 +136,19 @@ async function initCustomPage() {
 }
 
 /* ---------- boot ---------- */
+/* Full-image frames: the blurred backdrop is a copy of the frame's own photo. */
+function initFitFrames() {
+  document.querySelectorAll('.fit-frame').forEach((frame) => {
+    const img = frame.querySelector('img')
+    if (!img) return
+    const set = () => frame.style.setProperty('--bg', `url("${img.currentSrc || img.src}")`)
+    set()
+    img.addEventListener('load', set)
+  })
+}
+
 async function boot() {
+  initFitFrames()
   initNav()
   initWhatsApp()
   initVideos()
