@@ -633,3 +633,11 @@ footer{background:#fce8f7;color:#1c1c2e;padding:68px 0 0;border-top:1.5px solid 
   .stack-n{font-size:3rem}
   .stack{gap:22px}
 }
+
+/* ===== CQC widget (footer + services) ===== */
+.fcqc{display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center;padding:36px 0;border-bottom:1px solid #f0c8e8}
+.fcqc h5{font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--pink);margin-bottom:10px}
+.fcqc p{color:#6b5a70;font-size:.88rem;margin-bottom:12px;max-width:520px}
+.fcqc-widget,.cqc-widget{background:#fff;border-radius:16px;padding:16px;box-shadow:var(--sh-sm);min-width:300px;min-height:150px;max-width:100%;overflow:hidden}
+.cqc-widget{display:block;width:fit-content;max-width:100%;margin:36px auto 0;text-align:left}
+@media(max-width:768px){.fcqc{grid-template-columns:1fr;gap:20px}.fcqc-widget,.cqc-widget{min-width:0;width:100%}}
