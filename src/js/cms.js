@@ -88,7 +88,7 @@ export function indexPage() {
 /* ----------------------------- data loading ----------------------------- */
 
 const readCache = () => { try { return JSON.parse(localStorage.getItem(CACHE_KEY) || '{}') } catch { return {} } }
-const writeCache = (c) => { try { localStorage.setItem(CACHE_KEY, JSON.stringify(c)) } catch { /* private mode */ } }
+const writeCache = (c) => { if (window.acadiaConsent && !window.acadiaConsent.allowed('functional')) return; try { localStorage.setItem(CACHE_KEY, JSON.stringify(c)) } catch { /* private mode */ } }
 
 export async function restSelect(table, query) {
   const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${query}`, { headers: { apikey: SUPABASE_KEY, Accept: 'application/json' } })

@@ -5,6 +5,7 @@ import { initApplication } from './application.js'
 import { hasStoredSession } from './supabase.js'
 import { CMS_ENABLED } from './config.js'
 import { sanitize, escapeHtml } from './sanitize.js'
+import { initConsent } from './consent.js'
 
 /* ---------- navigation ---------- */
 function initNav() {
@@ -159,6 +160,7 @@ function initFitFrames() {
 }
 
 async function boot() {
+  initConsent()
   initFitFrames()
   initNav()
   initWhatsApp()

@@ -675,3 +675,87 @@ header{view-transition-name:site-header}
 @media (hover:hover) and (pointer:fine){
   .svc-card,.why-card,.vc,.sccard{background-image:radial-gradient(420px circle at var(--mx,50%) var(--my,-40%),rgba(223,63,182,.10),transparent 60%)}
 }
+
+/* =========================================================
+   COOKIE CONSENT
+   ========================================================= */
+.ck-banner{position:fixed;left:24px;bottom:24px;z-index:2500;width:min(440px,calc(100vw - 32px));background:rgba(255,255,255,.97);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--border);border-radius:24px;padding:24px 24px 20px;box-shadow:0 30px 80px rgba(26,8,24,.22),0 0 0 1px rgba(223,63,182,.06);transform:translateY(calc(100% + 40px)) scale(.96);opacity:0;transition:transform .7s cubic-bezier(.16,1,.3,1),opacity .5s ease;overflow:hidden;isolation:isolate}
+.ck-banner::before{content:'';position:absolute;inset:0 0 auto;height:4px;background:linear-gradient(90deg,var(--pink-light),var(--pink),var(--pink-deep));z-index:1}
+.ck-banner::after{content:'';position:absolute;width:220px;height:220px;right:-80px;top:-110px;border-radius:50%;background:radial-gradient(circle,rgba(223,63,182,.14),transparent 70%);z-index:-1}
+.ck-banner.show{transform:none;opacity:1}
+.ck-head{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.ck-ic{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,var(--pink-soft),#fff);border:1px solid rgba(223,63,182,.18);display:flex;align-items:center;justify-content:center;color:var(--pink);flex-shrink:0}
+.ck-banner.show .ck-ic{animation:ckWobble 1.4s .6s cubic-bezier(.36,.07,.19,.97) both}
+@keyframes ckWobble{0%,100%{transform:rotate(0)}20%{transform:rotate(-14deg) scale(1.08)}40%{transform:rotate(10deg)}60%{transform:rotate(-6deg)}80%{transform:rotate(3deg)}}
+.ck-ic svg{width:22px;height:22px}
+.ck-title{font-family:var(--font-d);font-size:1.3rem;font-weight:500;margin:0;color:var(--text)}
+.ck-text{font-size:.86rem;line-height:1.65;color:var(--text-2);margin:0 0 18px}
+.ck-text a,.ck-small a{color:var(--pink-deep);font-weight:600;text-decoration:underline;text-underline-offset:2px}
+.ck-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ck-btn{font:600 .86rem var(--font-b);border-radius:12px;padding:13px 16px;cursor:pointer;border:1.5px solid transparent;transition:transform .25s var(--ease),box-shadow .25s,background .2s,color .2s,border-color .2s}
+.ck-btn:hover{transform:translateY(-2px)}
+.ck-btn:focus-visible,.ck-link:focus-visible,.ck-x:focus-visible{outline:3px solid rgba(223,63,182,.45);outline-offset:2px}
+.ck-primary{background:var(--pink);color:#fff;box-shadow:0 8px 20px rgba(223,63,182,.28)}
+.ck-primary:hover{background:var(--pink-deep);box-shadow:0 12px 28px rgba(223,63,182,.35)}
+.ck-ghost{background:#fff;color:var(--pink-deep);border-color:var(--border-2)}
+.ck-ghost:hover{border-color:var(--pink);background:var(--pink-pale)}
+.ck-link{grid-column:1/-1;background:none;border:0;color:var(--text-2);font:600 .82rem var(--font-b);padding:8px;cursor:pointer;text-decoration:underline;text-underline-offset:3px;border-radius:8px}
+.ck-link:hover{color:var(--pink)}
+
+.ck-modal-bg{position:fixed;inset:0;z-index:2600;background:rgba(26,8,24,.55);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;transition:opacity .3s ease}
+.ck-modal-bg.show{opacity:1}
+.ck-modal{background:#fff;border-radius:26px;width:100%;max-width:560px;max-height:calc(100vh - 32px);display:flex;flex-direction:column;box-shadow:0 40px 100px rgba(0,0,0,.35);transform:translateY(24px) scale(.97);transition:transform .45s cubic-bezier(.16,1,.3,1);overflow:hidden}
+.ck-modal-bg.show .ck-modal{transform:none}
+.ck-modal-h{display:flex;align-items:center;justify-content:space-between;padding:22px 24px 8px}
+.ck-modal-h .ck-head{margin:0}
+.ck-x{width:38px;height:38px;border-radius:50%;border:0;background:var(--surface);color:var(--text-2);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .2s,transform .3s var(--ease)}
+.ck-x:hover{background:var(--pink-soft);color:var(--pink);transform:rotate(90deg)}
+.ck-x svg{width:18px;height:18px}
+.ck-modal-b{padding:8px 24px 6px;overflow:auto}
+.ck-cat{border:1px solid var(--border);border-radius:16px;padding:16px 18px;margin-bottom:12px;transition:border-color .2s,background .2s}
+.ck-cat:hover{border-color:rgba(223,63,182,.3);background:#fffbfe}
+.ck-cat-h{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.ck-cat-t{font-weight:700;font-size:.92rem;color:var(--text);margin:0;cursor:pointer}
+.ck-cat-d{font-size:.82rem;line-height:1.6;color:var(--text-2);margin:8px 0 0}
+.ck-always{font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#1a9e4b;background:#e8f8ee;padding:5px 10px;border-radius:100px;white-space:nowrap}
+.ck-switch{position:relative;width:50px;height:28px;flex-shrink:0}
+.ck-switch input{position:absolute;inset:0;width:100%;height:100%;opacity:0;margin:0;cursor:pointer;z-index:1;appearance:auto}
+.ck-switch span{position:absolute;inset:0;border-radius:100px;background:#d9cbd9;transition:background .3s}
+.ck-switch span::after{content:'';position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.2);transition:transform .35s cubic-bezier(.16,1,.3,1)}
+.ck-switch input:checked+span{background:var(--pink)}
+.ck-switch input:checked+span::after{transform:translateX(22px)}
+.ck-switch input:focus-visible+span{outline:3px solid rgba(223,63,182,.45);outline-offset:2px}
+.ck-small{font-size:.78rem;color:var(--text-3);margin:6px 0 12px}
+.ck-modal-f{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;padding:16px 24px 22px;border-top:1px solid var(--border);background:#fffbfe}
+
+/* WhatsApp button moves up while the banner is open on small screens */
+@media (max-width:640px){
+  .ck-banner{left:12px;right:12px;bottom:12px;width:auto;padding:20px 18px 14px;border-radius:22px}
+  .ck-open .wa-float{opacity:0;pointer-events:none}
+  .ck-modal-f{grid-template-columns:1fr}
+  .ck-modal-f .ck-primary{order:-1}
+}
+@media (prefers-reduced-motion:reduce){.ck-banner,.ck-modal,.ck-modal-bg{transition:none}.ck-banner.show .ck-ic{animation:none}}
+
+/* Consent-gated embeds (map, CQC widget) */
+.consent-embed{position:relative}
+.ce-ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;gap:8px;background:linear-gradient(135deg,var(--pink-pale),#fff 60%,var(--surface));color:var(--text-2)}
+.fcqc-widget .ce-ph{position:relative;inset:auto;min-height:150px;border-radius:12px}
+.ce-ph .ce-ic{width:48px;height:48px;border-radius:14px;background:#fff;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--pink);box-shadow:var(--sh-xs)}
+.ce-ph .ce-ic svg{width:24px;height:24px}
+.ce-ph strong{color:var(--text);font-size:.95rem}
+.ce-ph p{font-size:.8rem;margin:0;max-width:360px;line-height:1.55}
+.ce-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:4px}
+.ce-actions button{font:600 .78rem var(--font-b);border-radius:10px;padding:9px 14px;cursor:pointer;border:1.5px solid var(--pink);background:var(--pink);color:#fff;transition:transform .2s,background .2s}
+.ce-actions button+button{background:#fff;color:var(--pink-deep)}
+.ce-actions button:hover{transform:translateY(-2px)}
+.ce-ph a{font-size:.78rem;color:var(--pink-deep);font-weight:600;text-decoration:underline}
+.consent-embed.is-loaded .ce-ph{display:none}
+.footer-cookie-btn{background:none;border:0;padding:0;font:inherit;color:#8a7a90;font-size:.78rem;cursor:pointer}
+.footer-cookie-btn:hover{color:var(--pink)}
+.cookie-table{overflow-x:auto;margin:10px 0 22px;border:1px solid var(--border);border-radius:14px}
+.cookie-table table{width:100%;border-collapse:collapse;font-size:.86rem;min-width:560px}
+.cookie-table th{background:var(--pink-pale);color:var(--pink-deep);text-align:left;padding:10px 14px;font-size:.74rem;text-transform:uppercase;letter-spacing:.06em}
+.cookie-table td{padding:10px 14px;border-top:1px solid var(--border);color:var(--text-2);vertical-align:top}
+.cookie-table td:first-child{font-weight:600;color:var(--text);white-space:nowrap}
+.legal .btn{text-decoration:none;color:#fff}
