@@ -36,6 +36,8 @@ export const SITE_PAGES = [
   { label: 'Home', href: '/' },
   { label: 'About Us', href: '/about' },
   { label: 'Services', href: '/services' },
+  { label: 'Live-in Care', href: '/services#live-in' },
+  { label: 'Family Share', href: '/family-share' },
   { label: 'Careers', href: '/careers' },
   { label: 'Apply form', href: '/careers#apply' },
   { label: 'Contact', href: '/contact' },
