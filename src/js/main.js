@@ -53,9 +53,7 @@ function initVideos() {
 /* Hero: cinematic background video + "Watch our films" lightbox (full videos, with sound). */
 function initHeroVideo() {
   const bg = document.querySelector('.hero-video')
-  if (bg && 'IntersectionObserver' in window) {
-    new IntersectionObserver(([e]) => { if (e.isIntersecting) bg.play().catch(() => {}); else bg.pause() }).observe(bg)
-  }
+  if (bg) initHeroPlaylist(bg)
   const triggers = document.querySelectorAll('[data-film]')
   if (!triggers.length) return
   const box = document.createElement('div')
@@ -106,6 +104,79 @@ function initHeroVideo() {
   })
   box.addEventListener('click', (e) => { if (e.target === box || e.target.closest('.film-close')) close() })
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !box.hidden) close() })
+}
+
+/* Hero playlist: about-video first, then hero-video, on repeat.
+   Plays with sound when the browser allows it; otherwise starts muted and
+   switches sound on with the first tap/click/key press (or the sound button). */
+function initHeroPlaylist(bg) {
+  const mobile = matchMedia('(max-width: 768px)').matches
+  const base = '/assets/videos/'
+  const list = (bg.dataset.playlist || '').split(',').map((n) => n.trim()).filter(Boolean)
+    .map((n) => ({ src: `${base}${n}${mobile ? '-mobile' : ''}.mp4`, poster: `${base}${n}.jpg` }))
+  const btn = document.querySelector('.hero-sound')
+  let idx = 0
+  let userMuted = false
+  let visible = true
+
+  const sync = () => {
+    if (!btn) return
+    btn.hidden = false
+    btn.setAttribute('aria-pressed', String(!bg.muted))
+    btn.classList.toggle('on', !bg.muted)
+    btn.querySelector('.hs-txt').textContent = bg.muted ? 'Tap for sound' : 'Sound on'
+    btn.setAttribute('aria-label', bg.muted ? 'Turn video sound on' : 'Mute video')
+  }
+  const play = () => bg.play().catch(() => { if (!bg.muted) { bg.muted = true; sync(); bg.play().catch(() => {}) } })
+  const tryUnmute = () => {
+    if (userMuted || !bg.muted) return
+    bg.muted = false
+    sync()
+    if (visible) play()
+  }
+
+  // Try sound straight away where the browser permits it.
+  const policy = navigator.getAutoplayPolicy?.(bg)
+  if (policy === 'allowed' || navigator.userActivation?.hasBeenActive) tryUnmute()
+  else if (policy !== 'allowed-muted' && policy !== 'disallowed') tryUnmute()
+  sync()
+
+  // Next film in the playlist when one ends.
+  bg.addEventListener('ended', () => {
+    if (list.length < 2) { bg.currentTime = 0; play(); return }
+    idx = (idx + 1) % list.length
+    bg.poster = list[idx].poster
+    bg.src = list[idx].src
+    play()
+  })
+  // Warm up the next film shortly before the current one ends.
+  let warmed = false
+  bg.addEventListener('timeupdate', () => {
+    if (warmed || list.length < 2 || !bg.duration || bg.duration - bg.currentTime > 10) return
+    warmed = true
+    const next = list[(idx + 1) % list.length]
+    fetch(next.src, { headers: { Range: 'bytes=0-1500000' } }).catch(() => {})
+    new Image().src = next.poster
+  })
+  bg.addEventListener('loadstart', () => { warmed = false })
+
+  // First interaction anywhere turns sound on (browsers require a gesture).
+  const gesture = (e) => {
+    if (e.target.closest?.('.hero-sound')) return
+    tryUnmute()
+    if (!bg.muted || userMuted) ['pointerdown', 'pointerup', 'click', 'keydown'].forEach((t) => removeEventListener(t, gesture, true))
+  }
+  ;['pointerdown', 'pointerup', 'click', 'keydown'].forEach((t) => addEventListener(t, gesture, { capture: true, passive: true }))
+
+  btn?.addEventListener('click', () => {
+    if (bg.muted) { userMuted = false; tryUnmute() } else { userMuted = true; bg.muted = true; sync() }
+  })
+
+  // Pause when scrolled away or tab hidden, resume when back.
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible) play(); else bg.pause() }).observe(bg)
+  }
+  document.addEventListener('visibilitychange', () => { if (document.hidden) bg.pause(); else if (visible) play() })
 }
 
 /* ---------- custom CMS pages (/p/slug or /page?p=slug) ---------- */
