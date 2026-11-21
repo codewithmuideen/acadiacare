@@ -141,7 +141,7 @@ main,footer,.nav-links{transition:opacity .35s ease}
 .hero-watch strong{display:block;font-size:.95rem}.hero-watch small{display:block;font-size:.78rem;color:rgba(255,255,255,.65)}
 .welcome-film{position:fixed;inset:0;z-index:3500;background:#000;display:flex;align-items:center;justify-content:center;animation:fadeIn .3s ease}
 .welcome-film.closing{opacity:0;transition:opacity .35s ease}
-.welcome-film video{width:100vw;height:100vh;height:100dvh;max-width:none;object-fit:contain;background:#000}
+.welcome-film video{position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:cover;object-position:center;background:#000}
 .wf-close{position:absolute;top:16px;right:16px;top:max(16px,env(safe-area-inset-top));width:48px;height:48px;border-radius:50%;border:0;background:#fff;color:#1a1020;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2;box-shadow:0 8px 24px rgba(0,0,0,.4);transition:transform .25s,background .25s,color .25s}
 .wf-close svg{width:22px;height:22px}
 .wf-close:hover,.wf-close:focus-visible{background:var(--pink);color:#fff;transform:rotate(90deg)}
