@@ -106,77 +106,62 @@ function initHeroVideo() {
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !box.hidden) close() })
 }
 
-/* Hero playlist: about-video first, then hero-video, on repeat.
-   Plays with sound when the browser allows it; otherwise starts muted and
-   switches sound on with the first tap/click/key press (or the sound button). */
+/* Welcome film: about-video opens full screen first (with sound when the
+   browser allows it, otherwise muted until the first tap). Closing it, or
+   letting it finish, reveals the hero with hero-video as the background. */
 function initHeroPlaylist(bg) {
-  const mobile = matchMedia('(max-width: 768px)').matches
-  const base = '/assets/videos/'
-  const list = (bg.dataset.playlist || '').split(',').map((n) => n.trim()).filter(Boolean)
-    .map((n) => ({ src: `${base}${n}${mobile ? '-mobile' : ''}.mp4`, poster: `${base}${n}.jpg` }))
-  const btn = document.querySelector('.hero-sound')
-  let idx = 0
-  let userMuted = false
+  const startBg = () => {
+    if (bg.preload === 'none') { bg.preload = 'auto'; bg.load() }
+    bg.play().catch(() => {})
+  }
   let visible = true
-
-  const sync = () => {
-    if (!btn) return
-    btn.hidden = false
-    btn.setAttribute('aria-pressed', String(!bg.muted))
-    btn.classList.toggle('on', !bg.muted)
-    btn.querySelector('.hs-txt').textContent = bg.muted ? 'Tap for sound' : 'Sound on'
-    btn.setAttribute('aria-label', bg.muted ? 'Turn video sound on' : 'Mute video')
-  }
-  const play = () => bg.play().catch(() => { if (!bg.muted) { bg.muted = true; sync(); bg.play().catch(() => {}) } })
-  const tryUnmute = () => {
-    if (userMuted || !bg.muted) return
-    bg.muted = false
+  let modalOpen = false
+  const box = document.getElementById('welcomeFilm')
+  const editing = document.documentElement.classList.contains('cms-editing') || /[?&]edit/.test(location.search)
+  if (box && !editing) {
+    modalOpen = true
+    const v = box.querySelector('video')
+    const soundBtn = box.querySelector('.wf-sound')
+    document.documentElement.classList.add('film-open')
+    const sync = () => { soundBtn.hidden = !v.muted }
+    const unmute = () => {
+      if (!v.muted) return
+      v.muted = false
+      v.play().then(sync).catch(() => { v.muted = true; sync(); v.play().catch(() => {}) })
+    }
+    const close = () => {
+      if (!modalOpen) return
+      modalOpen = false
+      v.pause()
+      box.classList.add('closing')
+      setTimeout(() => box.remove(), 350)
+      document.documentElement.classList.remove('film-open')
+      removeEventListener('keydown', onKey)
+      if (visible) startBg()
+    }
+    const onKey = (e) => { if (e.key === 'Escape') close(); else unmute() }
+    addEventListener('keydown', onKey)
+    box.querySelector('.wf-close').addEventListener('click', close)
+    soundBtn.addEventListener('click', unmute)
+    box.addEventListener('pointerdown', (e) => { if (!e.target.closest('.wf-close')) unmute() })
+    v.addEventListener('volumechange', sync)
+    v.addEventListener('ended', close)
+    // Try with sound straight away; fall back to muted if the browser blocks it.
+    const policy = navigator.getAutoplayPolicy?.(v)
+    if (policy !== 'allowed-muted' && policy !== 'disallowed') unmute()
     sync()
-    if (visible) play()
+    v.play().catch(() => {})
+    box.querySelector('.wf-close').focus({ preventScroll: true })
+  } else {
+    box?.remove()
+    startBg()
   }
 
-  // Try sound straight away where the browser permits it.
-  const policy = navigator.getAutoplayPolicy?.(bg)
-  if (policy === 'allowed' || navigator.userActivation?.hasBeenActive) tryUnmute()
-  else if (policy !== 'allowed-muted' && policy !== 'disallowed') tryUnmute()
-  sync()
-
-  // Next film in the playlist when one ends.
-  bg.addEventListener('ended', () => {
-    if (list.length < 2) { bg.currentTime = 0; play(); return }
-    idx = (idx + 1) % list.length
-    bg.poster = list[idx].poster
-    bg.src = list[idx].src
-    play()
-  })
-  // Warm up the next film shortly before the current one ends.
-  let warmed = false
-  bg.addEventListener('timeupdate', () => {
-    if (warmed || list.length < 2 || !bg.duration || bg.duration - bg.currentTime > 10) return
-    warmed = true
-    const next = list[(idx + 1) % list.length]
-    fetch(next.src, { headers: { Range: 'bytes=0-1500000' } }).catch(() => {})
-    new Image().src = next.poster
-  })
-  bg.addEventListener('loadstart', () => { warmed = false })
-
-  // First interaction anywhere turns sound on (browsers require a gesture).
-  const gesture = (e) => {
-    if (e.target.closest?.('.hero-sound')) return
-    tryUnmute()
-    if (!bg.muted || userMuted) ['pointerdown', 'pointerup', 'click', 'keydown'].forEach((t) => removeEventListener(t, gesture, true))
-  }
-  ;['pointerdown', 'pointerup', 'click', 'keydown'].forEach((t) => addEventListener(t, gesture, { capture: true, passive: true }))
-
-  btn?.addEventListener('click', () => {
-    if (bg.muted) { userMuted = false; tryUnmute() } else { userMuted = true; bg.muted = true; sync() }
-  })
-
-  // Pause when scrolled away or tab hidden, resume when back.
+  // Hero background pauses when scrolled away or the tab is hidden.
   if ('IntersectionObserver' in window) {
-    new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible) play(); else bg.pause() }).observe(bg)
+    new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (modalOpen) return; if (visible) startBg(); else bg.pause() }).observe(bg)
   }
-  document.addEventListener('visibilitychange', () => { if (document.hidden) bg.pause(); else if (visible) play() })
+  document.addEventListener('visibilitychange', () => { if (document.hidden) bg.pause(); else if (visible && !modalOpen) startBg() })
 }
 
 /* ---------- custom CMS pages (/p/slug or /page?p=slug) ---------- */
