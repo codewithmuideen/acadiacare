@@ -804,6 +804,9 @@ header{view-transition-name:site-header}
 .film-frame video{width:100%;height:100%;object-fit:cover}
 .film-frame.playing .vid-play{opacity:0;pointer-events:none}
 .film-frame.playing video{object-fit:contain;background:#000}
+.sp-sound{position:absolute;left:14px;bottom:56px;z-index:3;display:inline-flex;align-items:center;gap:8px;padding:9px 16px 9px 12px;border-radius:999px;border:0;background:var(--pink);color:#fff;font-family:inherit;font-weight:700;font-size:.85rem;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.35);animation:pulseW 2.4s infinite}
+.sp-sound svg{width:20px;height:20px}
+.sp-sound[hidden]{display:none}
 .film-note{font-size:.76rem;color:var(--text-3);margin-top:10px}
 .film-txt h2{margin-bottom:14px}
 .film-txt p{margin-bottom:14px}
