@@ -48,6 +48,40 @@ function initVideos() {
     video.addEventListener('pause', () => { if (video.currentTime === 0 || video.ended) wrap.classList.remove('playing') })
   })
   initHeroVideo()
+  initScrollPlay()
+}
+
+/* Films marked data-scroll-play start by themselves (with sound where the
+   browser allows) when scrolled into view, and pause when scrolled away. */
+function initScrollPlay() {
+  document.querySelectorAll('[data-scroll-play]').forEach((wrap) => {
+    const v = wrap.querySelector('video')
+    const soundBtn = wrap.querySelector('.sp-sound')
+    let userPaused = false
+    let auto = false
+    const sync = () => { if (soundBtn) soundBtn.hidden = !v.muted || v.paused }
+    const start = () => {
+      if (v.preload === 'none') v.preload = 'auto'
+      auto = true
+      v.muted = false
+      v.play().catch(() => { v.muted = true; v.play().catch(() => {}) }).finally(() => { auto = false; sync() })
+    }
+    const unmute = () => { v.muted = false; v.play().catch(() => {}); sync() }
+    soundBtn?.addEventListener('click', (e) => { e.stopPropagation(); unmute() })
+    v.addEventListener('volumechange', sync)
+    v.addEventListener('play', sync)
+    v.addEventListener('pause', () => { if (!auto && !v.ended && document.visibilityState === 'visible' && wrap.dataset.inView === '1') userPaused = true; sync() })
+    v.addEventListener('ended', () => { userPaused = true })
+    if (!('IntersectionObserver' in window)) return
+    // Start fetching a little before it arrives so it plays instantly.
+    new IntersectionObserver(([e], o) => { if (e.isIntersecting) { v.preload = 'auto'; o.disconnect() } }, { rootMargin: '600px 0px' }).observe(wrap)
+    new IntersectionObserver(([e]) => {
+      wrap.dataset.inView = e.isIntersecting ? '1' : '0'
+      if (e.isIntersecting) { if (!userPaused && !document.getElementById('welcomeFilm')) start() } else if (!v.paused) { auto = true; v.pause(); auto = false }
+    }, { threshold: 0.5 }).observe(wrap)
+    // If the welcome film was open while this was on screen, start once it closes.
+    addEventListener('welcomefilm:closed', () => { if (wrap.dataset.inView === '1' && !userPaused) start() })
+  })
 }
 
 /* Hero: cinematic background video + "Watch our films" lightbox (full videos, with sound). */
@@ -106,7 +140,7 @@ function initHeroVideo() {
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !box.hidden) close() })
 }
 
-/* Welcome film: about-video opens full screen first (with sound when the
+/* Welcome film: hero-video opens full screen first (with sound when the
    browser allows it, otherwise muted until the first tap). Closing it, or
    letting it finish, reveals the hero with hero-video as the background. */
 function initHeroPlaylist(bg) {
@@ -138,6 +172,7 @@ function initHeroPlaylist(bg) {
       document.documentElement.classList.remove('film-open')
       removeEventListener('keydown', onKey)
       if (visible) startBg()
+      setTimeout(() => dispatchEvent(new Event('welcomefilm:closed')), 360)
     }
     const onKey = (e) => { if (e.key === 'Escape') close(); else unmute() }
     addEventListener('keydown', onKey)
