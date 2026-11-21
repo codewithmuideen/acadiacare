@@ -8,3 +8,6 @@ dist
 
 .vercel
 .env*
+
+# raw video masters (compressed copies live in public/assets/videos)
+video-masters/

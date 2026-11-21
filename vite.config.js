@@ -67,7 +67,7 @@ const htmlKit = () => ({
   },
 })
 
-const pages = ['index', 'about/index', 'services/index', 'careers/index', 'contact/index',
+const pages = ['index', 'about/index', 'services/index', 'family-share/index', 'careers/index', 'contact/index',
   'privacy-policy/index', 'terms/index', 'page/index', 'admin/index', '404']
 
 export default defineConfig({

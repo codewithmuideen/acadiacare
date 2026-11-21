@@ -71,6 +71,7 @@ function initHeroVideo() {
   const films = [...triggers].filter((t) => t.dataset.film && t.dataset.filmTitle)
   const unique = [...new Map(films.map((t) => [t.dataset.film, t])).values()]
   tabs.innerHTML = unique.map((t, i) => `<button type="button" data-i="${i}">${t.dataset.filmTitle}</button>`).join('')
+  tabs.hidden = unique.length < 2
   let last = null
   const play = (src, poster) => {
     video.src = src

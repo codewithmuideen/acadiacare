@@ -13,7 +13,7 @@
 <meta name="twitter:description" content="CQC registered home care in Stafford &amp; Staffordshire since 2013. Visiting, live-in, dementia and nurse led care &amp; healthcare staffing. Call 07949 720 932.">
 <script type="application/ld+json" data-page-ld>{"@context":"https://schema.org","@type":["HomeHealthCareService","LocalBusiness"],"@id":"https://acadiacare.co.uk/#business","name":"Acadia Support Services Limited","alternateName":"Acadia Care","url":"https://acadiacare.co.uk/","parentOrganization":{"@id":"https://acadiacare.co.uk/#organization"},"logo":"https://acadiacare.co.uk/icon-512.png","image":["https://acadiacare.co.uk/og-image.jpg","https://acadiacare.co.uk/assets/images/hq/carer-hug-laughing-lady.webp"],"description":"CQC registered domiciliary care, live-in care, dementia care, nurse led care and healthcare staffing in Stafford and across Staffordshire.","telephone":"+447949720932","email":"care@acadiacare.co.uk","foundingDate":"2013","priceRange":"££","address":{"@type":"PostalAddress","streetAddress":"Whittle Rise, Staffordshire Technology Park","addressLocality":"Stafford","addressRegion":"Staffordshire","postalCode":"ST18 0ES","addressCountry":"GB"},"openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday"],"opens":"09:00","closes":"17:30"}],"areaServed":[{"@type":"Place","name":"Stafford"},{"@type":"Place","name":"Staffordshire"},{"@type":"Place","name":"Stoke-on-Trent"},{"@type":"Place","name":"Lichfield"},{"@type":"Place","name":"Stone"},{"@type":"Place","name":"Rugeley"},{"@type":"Place","name":"Cannock"}],"knowsAbout":["Domiciliary care","Live-in care","Dementia care","Palliative care","Nurse led care","Learning disabilities","Healthcare staffing"],"hasOfferCatalog":{"@type":"OfferCatalog","name":"Care services","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"Domiciliary and Home Care","description":"Visiting care from 30 minutes, live-in care, 24-hour care and overnight support at home across Staffordshire."}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Live-in Care","description":"A dedicated carer living in the home to provide round the clock support and companionship."}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Nurse Led and Clinical Care","description":"PEG feeding, stoma care, catheter care, wound dressing and intravenous medication support at home."}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Dementia Care","description":"Specialist, person centred dementia care at every stage, delivered at home."}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Palliative and End of Life Care","description":"Compassionate palliative and end of life care so people can remain comfortable at home."}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Supported Living","description":"Support for adults with learning disabilities, autism and complex needs to live independently."}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Respite Care","description":"Short term care that gives family carers a well-earned break."}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Healthcare Staffing","description":"Bank, temporary and permanent support workers, care assistants, senior carers and nurses for care organisations."}}]},"sameAs":["https://www.cqc.org.uk/location/1-8530909595","https://portal.homecare.co.uk/index.cfm/id/65432250790","https://www.facebook.com/p/Acadia-Support-100063914539945/","https://www.instagram.com/acadiasupportservices"]}</script>
 <!-- @include head -->
-<link rel="preload" as="image" href="/assets/videos/hero-care.jpg" fetchpriority="high">
+<link rel="preload" as="image" href="/assets/videos/hero-video.jpg" fetchpriority="high">
 </head>
 <body>
 <!-- @include nav -->
@@ -22,8 +22,9 @@
 
 <section class="hero hero-cine" data-s="home-hero">
   <div class="hero-bg" data-hero-media>
-    <video class="hero-video" autoplay muted loop playsinline preload="auto" poster="/assets/videos/hero-care.jpg" aria-hidden="true">
-      <source src="/assets/videos/hero-care.mp4" type="video/mp4">
+    <video class="hero-video" autoplay muted loop playsinline preload="auto" poster="/assets/videos/hero-video.jpg" aria-hidden="true">
+      <source src="/assets/videos/hero-video-mobile.mp4" type="video/mp4" media="(max-width: 768px)">
+      <source src="/assets/videos/hero-video.mp4" type="video/mp4">
     </video>
   </div>
   <div class="hero-shade" aria-hidden="true"></div>
@@ -38,8 +39,12 @@
         <a href="/careers#apply" class="btn btn-ghost btn-lg"><i data-lucide="briefcase-medical"></i><span>Apply for Work</span></a>
         <a href="tel:+447949720932" data-link="tel" class="btn btn-ghost btn-lg"><i data-lucide="phone-call"></i><span>Call Us</span></a>
       </div>
+      <button type="button" class="hero-watch" data-hero-in data-film="/assets/videos/hero-video.mp4" data-film-poster="/assets/videos/hero-video.jpg" data-film-title="Mum Said She Was Fine">
+        <span class="hw-play"><i data-lucide="play" class="ic-fill"></i></span>
+        <span><strong>Watch our film, with sound</strong><small>&ldquo;Mum Said She Was Fine&rdquo; &middot; 45 seconds</small></span>
+      </button>
       <div class="hero-stats" data-hero-in>
-        <div><span class="hs-num">5+</span><span class="hs-label">Years in Staffordshire</span></div>
+        <div><span class="hs-num">10+</span><span class="hs-label">Years in Staffordshire</span></div>
         <div><span class="hs-num">CQC</span><span class="hs-label">Registered Provider</span></div>
         <div><span class="hs-num">24/7</span><span class="hs-label">Always Available</span></div>
       </div>
@@ -56,6 +61,7 @@
     <div class="ti"><div class="ti-icon"><i data-lucide="globe"></i></div><div><strong>Culturally Inclusive</strong><span>Halal, Kosher, vegan and more</span></div></div>
     <div class="ti"><div class="ti-icon"><i data-lucide="wallet"></i></div><div><strong>NHS CHC Accepted</strong><span>Self pay and Local Authority</span></div></div>
     <div class="ti"><div class="ti-icon"><i data-lucide="phone-call"></i></div><div><strong>Always Available</strong><span>24/7 emergency support</span></div></div>
+    <div class="ti"><div class="ti-icon"><i data-lucide="smartphone"></i></div><div><strong>Family Share</strong><span>Care notes for loved ones</span></div></div>
   </div>
 </div>
 
@@ -78,6 +84,42 @@
           <span class="pill">LGBTQ+ Inclusive</span><span class="pill">Pet Friendly</span>
         </div>
         <a href="/about" class="btn btn-pink"><span>Read Our Full Story</span> <i data-lucide="arrow-right"></i></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec fs-sec" id="family-share" data-s="home-family-share">
+  <div class="wrap">
+    <div class="fs-grid">
+      <div class="fs-text" data-reveal="left">
+        <span class="eyebrow">Family Share</span>
+        <p class="fs-quote">&ldquo;I&rsquo;m fine, darling.&rdquo;</p>
+        <h2>You can&rsquo;t always be there. But you can always <em>stay connected.</em></h2>
+        <p>Three words every son and daughter wants to believe. But when Mum or Dad is living with dementia, or simply prefers not to worry you, how do you really know they have eaten, taken their medication and are comfortable at home?</p>
+        <p>We believe families deserve more than reassurance. They deserve transparency. Alongside compassionate care, our digital care management system lets authorised family members see care notes and visit updates, whether they are at work, travelling or living miles away.</p>
+        <ul class="fs-pillars">
+          <li><i data-lucide="shield-check"></i><div><strong>Trust</strong><span>Vetted, DBS checked carers matched to your loved one, with the continuity that builds real relationships.</span></div></li>
+          <li><i data-lucide="eye"></i><div><strong>Transparency</strong><span>See what happened at each visit: meals, medication support, mood and wellbeing, recorded by the carer.</span></div></li>
+          <li><i data-lucide="heart"></i><div><strong>Peace of mind</strong><span>Keep working, travelling and living your life without constantly wondering how Mum is doing.</span></div></li>
+        </ul>
+        <div class="fs-btns">
+          <a href="/family-share" class="btn btn-pink"><span>How Family Share Works</span> <i data-lucide="arrow-right"></i></a>
+          <button type="button" class="btn btn-outline" data-film="/assets/videos/hero-video.mp4" data-film-poster="/assets/videos/hero-video.jpg" data-film-title="Mum Said She Was Fine"><i data-lucide="play"></i><span>Watch the Film</span></button>
+        </div>
+      </div>
+      <div class="fs-device" data-reveal="right">
+        <div class="fs-phone" aria-label="Example of Acadia Family Share care notes" role="img">
+          <div class="fs-screen">
+            <div class="fs-app"><i data-lucide="heart-handshake"></i><div><strong>Acadia Family Share</strong><small>Today &middot; Mum&rsquo;s care notes</small></div></div>
+            <div class="fs-note ok"><i data-lucide="circle-check"></i><div><strong>Care visit completed</strong><small>Carer arrived on time, 12:02</small></div></div>
+            <div class="fs-note"><i data-lucide="utensils"></i><div><strong>Lunch enjoyed</strong><small>Favourite soup and a sandwich</small></div></div>
+            <div class="fs-note"><i data-lucide="pill"></i><div><strong>Medication support recorded</strong><small>Lunchtime medication given</small></div></div>
+            <div class="fs-note"><i data-lucide="footprints"></i><div><strong>Walk completed</strong><small>Short walk in the garden</small></div></div>
+            <div class="fs-note ok"><i data-lucide="smile"></i><div><strong>Settled and comfortable</strong><small>Mood calm, chatted over a cup of tea</small></div></div>
+          </div>
+        </div>
+        <p class="fs-caption">Illustrative example only, not real client records. Access is given to family members authorised by the person receiving care.</p>
       </div>
     </div>
   </div>
@@ -335,6 +377,7 @@
         <h2 style="margin-bottom:10px">We are here when you need us</h2>
         <p style="margin-bottom:26px">A real person answers our phone. Whether you need to arrange care, ask a question or just have a conversation about what is possible, please reach out.</p>
         <div class="cd"><div class="cd-ic"><i data-lucide="phone"></i></div><div class="cd-t"><strong>Phone</strong><a href="tel:+447949720932" data-link="tel" data-set="phone" data-noedit>07949 720 932</a></div></div>
+        <div class="cd" data-noedit><div class="cd-ic"><i data-lucide="building-2"></i></div><div class="cd-t"><strong>Office</strong><a href="tel:+441785747225">01785 747225</a></div></div>
         <div class="cd"><div class="cd-ic"><i data-lucide="mail"></i></div><div class="cd-t"><strong>Email</strong><a href="mailto:care@acadiacare.co.uk" data-link="mailto" data-set="email" data-noedit>care@acadiacare.co.uk</a></div></div>
         <div class="cd"><div class="cd-ic"><i data-lucide="map-pin"></i></div><div class="cd-t"><strong>Address</strong><span data-set="address" data-noedit>Whittle Rise, Staffordshire Technology Park, Stafford, ST18 0ES</span></div></div>
         <div class="cd"><div class="cd-ic"><i data-lucide="clock"></i></div><div class="cd-t"><strong>Office Hours</strong><span>Monday to Friday, 9am to 5:30pm. Emergency line 24/7.</span></div></div>

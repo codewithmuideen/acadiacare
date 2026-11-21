@@ -4,7 +4,10 @@
 
 Acadia Care supports adults of all ages to live well at home. Services include visiting care (from 30 minutes), live-in and 24-hour care, overnight care, respite, nurse led and clinical care (PEG feeding, stoma, catheter, wound care, IV medication support), dementia, palliative and end of life care, learning disability and autism support, supported living, household help, and healthcare staffing (support workers, care assistants, senior carers, RGN and RMN nurses) for care organisations. Self funded, Local Authority and NHS Continuing Healthcare funding are accepted.
 
+Live-in care is offered as an alternative to a care home, including dementia and Alzheimer's care, 24 hour care, overnight support and support after hospital discharge. Through the Acadia Family Share feature of its digital care management system, authorised family members can securely read care notes and visit updates wherever they are. Slogan: "You can't always be there. But you can always stay connected."
+
 - Phone: 07949 720 932 (24/7 emergency line)
+- Office: 01785 747225
 - Email: care@acadiacare.co.uk
 - CQC profile: https://www.cqc.org.uk/location/1-8530909595
 - Reviews: https://portal.homecare.co.uk/index.cfm/id/65432250790
@@ -12,6 +15,7 @@ Acadia Care supports adults of all ages to live well at home. Services include v
 ## Pages
 - [Home](https://acadiacare.co.uk/): overview of care and staffing services
 - [About](https://acadiacare.co.uk/about): history, mission and values
-- [Services](https://acadiacare.co.uk/services): full list of care services and conditions supported
+- [Services](https://acadiacare.co.uk/services): full list of care services and conditions supported, including live-in care
+- [Family Share](https://acadiacare.co.uk/family-share): how families can see care notes and know an elderly parent is properly cared for at home
 - [Careers](https://acadiacare.co.uk/careers): current vacancies and online job application
 - [Contact](https://acadiacare.co.uk/contact): phone, email, address and enquiry form
