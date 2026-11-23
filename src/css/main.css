@@ -188,7 +188,8 @@ main,footer,.nav-links{transition:opacity .35s ease}
    the card edge to edge and nothing is cropped (also for CMS-uploaded photos). */
 .ab-img-wrap{align-self:start;position:sticky;top:calc(var(--nav) + 32px);margin-top:48px}
 .photo-frame{border-radius:var(--rl);overflow:hidden;box-shadow:var(--sh-lg);background:var(--surface)}
-.photo-frame img{width:100%;height:auto;display:block}
+.photo-frame{width:fit-content;max-width:100%;margin-inline:auto}
+.photo-frame img{width:auto;max-width:100%;height:auto;max-height:min(72vh,640px);display:block}
 .stack-img.photo{background:none;padding:22px;align-self:center;display:block}
 .stack-img.photo img{width:100%;height:auto;display:block;border-radius:20px}
 .photo-card{grid-template-columns:1fr}
