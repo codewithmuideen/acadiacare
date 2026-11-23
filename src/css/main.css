@@ -802,6 +802,7 @@ header{view-transition-name:site-header}
 .film-frame.playing .vid-play{opacity:0;pointer-events:none}
 .film-frame.playing video{object-fit:contain;background:#000}
 .film-note{font-size:.76rem;color:var(--text-3);margin-top:10px}
+.film-note strong{color:var(--pink-deep);font-weight:600}
 .film-txt h2{margin-bottom:14px}
 .film-txt p{margin-bottom:14px}
 .film-txt blockquote{font-family:var(--font-d);font-style:italic;font-size:1.2rem;color:var(--pink-deep);border-left:3px solid var(--pink);padding-left:16px;margin:20px 0}
