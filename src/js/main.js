@@ -48,155 +48,20 @@ function initVideos() {
     video.addEventListener('pause', () => { if (video.currentTime === 0 || video.ended) wrap.classList.remove('playing') })
   })
   initHeroVideo()
-  initScrollPlay()
 }
 
-/* Films marked data-scroll-play start by themselves (with sound where the
-   browser allows) when scrolled into view, and pause when scrolled away. */
-function initScrollPlay() {
-  document.querySelectorAll('[data-scroll-play]').forEach((wrap) => {
-    const v = wrap.querySelector('video')
-    const soundBtn = wrap.querySelector('.sp-sound')
-    let userPaused = false
-    let auto = false
-    const sync = () => { if (soundBtn) soundBtn.hidden = !v.muted || v.paused }
-    const start = () => {
-      if (v.preload === 'none') v.preload = 'auto'
-      auto = true
-      v.muted = false
-      v.play().catch(() => { v.muted = true; v.play().catch(() => {}) }).finally(() => { auto = false; sync() })
-    }
-    const unmute = () => { v.muted = false; v.play().catch(() => {}); sync() }
-    soundBtn?.addEventListener('click', (e) => { e.stopPropagation(); unmute() })
-    v.addEventListener('volumechange', sync)
-    v.addEventListener('play', sync)
-    v.addEventListener('pause', () => { if (!auto && !v.ended && document.visibilityState === 'visible' && wrap.dataset.inView === '1') userPaused = true; sync() })
-    v.addEventListener('ended', () => { userPaused = true })
-    if (!('IntersectionObserver' in window)) return
-    // Start fetching a little before it arrives so it plays instantly.
-    new IntersectionObserver(([e], o) => { if (e.isIntersecting) { v.preload = 'auto'; o.disconnect() } }, { rootMargin: '600px 0px' }).observe(wrap)
-    new IntersectionObserver(([e]) => {
-      wrap.dataset.inView = e.isIntersecting ? '1' : '0'
-      if (e.isIntersecting) { if (!userPaused && !document.getElementById('welcomeFilm')) start() } else if (!v.paused) { auto = true; v.pause(); auto = false }
-    }, { threshold: 0.5 }).observe(wrap)
-    // If the welcome film was open while this was on screen, start once it closes.
-    addEventListener('welcomefilm:closed', () => { if (wrap.dataset.inView === '1' && !userPaused) start() })
-  })
-}
-
-/* Hero: cinematic background video + "Watch our films" lightbox (full videos, with sound). */
+/* Hero: the only video on the site. Plays muted on a loop as the background,
+   pausing while scrolled out of view or when the tab is hidden. */
 function initHeroVideo() {
   const bg = document.querySelector('.hero-video')
-  if (bg) initHeroPlaylist(bg)
-  const triggers = document.querySelectorAll('[data-film]')
-  if (!triggers.length) return
-  const box = document.createElement('div')
-  box.className = 'film-box'
-  box.setAttribute('role', 'dialog')
-  box.setAttribute('aria-modal', 'true')
-  box.setAttribute('aria-label', 'Acadia Care film')
-  box.hidden = true
-  box.innerHTML = '<div class="film-inner"><button class="film-close" type="button" aria-label="Close video"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button><video controls playsinline></video><div class="film-tabs"></div></div>'
-  document.body.appendChild(box)
-  const video = box.querySelector('video')
-  const tabs = box.querySelector('.film-tabs')
-  const films = [...triggers].filter((t) => t.dataset.film && t.dataset.filmTitle)
-  const unique = [...new Map(films.map((t) => [t.dataset.film, t])).values()]
-  tabs.innerHTML = unique.map((t, i) => `<button type="button" data-i="${i}">${t.dataset.filmTitle}</button>`).join('')
-  tabs.hidden = unique.length < 2
-  let last = null
-  const play = (src, poster) => {
-    video.src = src
-    if (poster) video.poster = poster
-    video.play().catch(() => {})
-    tabs.querySelectorAll('button').forEach((b, i) => b.classList.toggle('on', unique[i].dataset.film === src))
-  }
-  const open = (t) => {
-    last = document.activeElement
-    box.hidden = false
-    document.documentElement.classList.add('film-open')
-    bg?.pause()
-    play(t.dataset.film, t.dataset.filmPoster)
-    box.querySelector('.film-close').focus()
-  }
-  const close = () => {
-    video.pause()
-    box.hidden = true
-    document.documentElement.classList.remove('film-open')
-    bg?.play().catch(() => {})
-    last?.focus?.()
-  }
-  triggers.forEach((t) => t.addEventListener('click', (e) => {
-    if (document.documentElement.classList.contains('cms-editing')) return
-    e.preventDefault()
-    open(t.dataset.film ? t : unique[0])
-  }))
-  tabs.addEventListener('click', (e) => { const b = e.target.closest('[data-i]'); if (b) { const t = unique[+b.dataset.i]; play(t.dataset.film, t.dataset.filmPoster) } })
-  video.addEventListener('ended', () => {
-    const i = unique.findIndex((t) => t.dataset.film === video.getAttribute('src'))
-    if (i > -1 && i < unique.length - 1) play(unique[i + 1].dataset.film, unique[i + 1].dataset.filmPoster)
-  })
-  box.addEventListener('click', (e) => { if (e.target === box || e.target.closest('.film-close')) close() })
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !box.hidden) close() })
-}
-
-/* Welcome film: hero-video opens full screen first (with sound when the
-   browser allows it, otherwise muted until the first tap). Closing it, or
-   letting it finish, reveals the hero with hero-video as the background. */
-function initHeroPlaylist(bg) {
-  const startBg = () => {
-    if (bg.preload === 'none') { bg.preload = 'auto'; bg.load() }
-    bg.play().catch(() => {})
-  }
+  if (!bg) return
   let visible = true
-  let modalOpen = false
-  const box = document.getElementById('welcomeFilm')
-  const editing = document.documentElement.classList.contains('cms-editing') || /[?&]edit/.test(location.search)
-  if (box && !editing) {
-    modalOpen = true
-    const v = box.querySelector('video')
-    const soundBtn = box.querySelector('.wf-sound')
-    document.documentElement.classList.add('film-open')
-    const sync = () => { soundBtn.hidden = !v.muted }
-    const unmute = () => {
-      if (!v.muted) return
-      v.muted = false
-      v.play().then(sync).catch(() => { v.muted = true; sync(); v.play().catch(() => {}) })
-    }
-    const close = () => {
-      if (!modalOpen) return
-      modalOpen = false
-      v.pause()
-      box.classList.add('closing')
-      setTimeout(() => box.remove(), 350)
-      document.documentElement.classList.remove('film-open')
-      removeEventListener('keydown', onKey)
-      if (visible) startBg()
-      setTimeout(() => dispatchEvent(new Event('welcomefilm:closed')), 360)
-    }
-    const onKey = (e) => { if (e.key === 'Escape') close(); else unmute() }
-    addEventListener('keydown', onKey)
-    box.querySelector('.wf-close').addEventListener('click', close)
-    soundBtn.addEventListener('click', unmute)
-    box.addEventListener('pointerdown', (e) => { if (!e.target.closest('.wf-close')) unmute() })
-    v.addEventListener('volumechange', sync)
-    v.addEventListener('ended', close)
-    // Try with sound straight away; fall back to muted if the browser blocks it.
-    const policy = navigator.getAutoplayPolicy?.(v)
-    if (policy !== 'allowed-muted' && policy !== 'disallowed') unmute()
-    sync()
-    v.play().catch(() => {})
-    box.querySelector('.wf-close').focus({ preventScroll: true })
-  } else {
-    box?.remove()
-    startBg()
-  }
-
-  // Hero background pauses when scrolled away or the tab is hidden.
+  const start = () => bg.play().catch(() => {})
+  start()
   if ('IntersectionObserver' in window) {
-    new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (modalOpen) return; if (visible) startBg(); else bg.pause() }).observe(bg)
+    new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible) start(); else bg.pause() }).observe(bg)
   }
-  document.addEventListener('visibilitychange', () => { if (document.hidden) bg.pause(); else if (visible && !modalOpen) startBg() })
+  document.addEventListener('visibilitychange', () => { if (document.hidden) bg.pause(); else if (visible) start() })
 }
 
 /* ---------- custom CMS pages (/p/slug or /page?p=slug) ---------- */
