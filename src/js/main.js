@@ -40,12 +40,44 @@ function initVideos() {
   document.querySelectorAll('[data-video]').forEach((wrap) => {
     const video = wrap.querySelector('video')
     const btn = wrap.querySelector('.vid-play')
-    btn?.addEventListener('click', () => { video.play(); wrap.classList.add('playing') })
+    let auto = false        // currently playing muted because it scrolled into view
+    let userPaused = false  // viewer paused it themselves: don't restart on scroll
+    btn?.addEventListener('click', () => {
+      auto = false
+      video.muted = false
+      wrap.classList.remove('autoplaying')
+      video.play(); wrap.classList.add('playing')
+    })
     video.addEventListener('play', () => {
-      wrap.classList.add('playing')
+      if (!auto) wrap.classList.add('playing')
       document.querySelectorAll('[data-video] video').forEach((v) => { if (v !== video) v.pause() })
     })
-    video.addEventListener('pause', () => { if (video.currentTime === 0 || video.ended) wrap.classList.remove('playing') })
+    video.addEventListener('pause', () => {
+      if (!video.ended && document.visibilityState === 'visible' && wrap.dataset.inView === '1') userPaused = true
+      if (video.currentTime === 0 || video.ended) wrap.classList.remove('playing', 'autoplaying')
+    })
+    // Unmuting via the native controls counts as choosing to watch with sound
+    video.addEventListener('volumechange', () => {
+      if (auto && !video.muted) { auto = false; wrap.classList.remove('autoplaying'); wrap.classList.add('playing') }
+    })
+    // Autoplay (muted, as browsers require) once the film scrolls into view; pause when it leaves.
+    if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      new IntersectionObserver(([e]) => {
+        wrap.dataset.inView = e.isIntersecting ? '1' : '0'
+        if (e.isIntersecting) {
+          if (!video.paused || userPaused) return
+          if (!wrap.classList.contains('playing')) {
+            auto = true
+            video.muted = true
+            if (video.preload === 'none') video.preload = 'auto'
+            wrap.classList.add('autoplaying')
+          }
+          video.play().catch(() => { auto = false; wrap.classList.remove('autoplaying') })
+        } else if (!video.paused) {
+          video.pause()
+        }
+      }, { threshold: 0.5 }).observe(wrap)
+    }
   })
   initHeroVideo()
 }
