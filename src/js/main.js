@@ -60,19 +60,26 @@ function initVideos() {
     video.addEventListener('volumechange', () => {
       if (auto && !video.muted) { auto = false; wrap.classList.remove('autoplaying'); wrap.classList.add('playing') }
     })
+    const unmuteOnGesture = () => { if (auto && !video.paused) video.muted = false }
+    ;['pointerdown', 'keydown', 'touchend'].forEach((t) => document.addEventListener(t, unmuteOnGesture, { passive: true }))
     // Autoplay (muted, as browsers require) once the film scrolls into view; pause when it leaves.
     if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
       new IntersectionObserver(([e]) => {
         wrap.dataset.inView = e.isIntersecting ? '1' : '0'
         if (e.isIntersecting) {
           if (!video.paused || userPaused) return
-          if (!wrap.classList.contains('playing')) {
+          if (video.preload === 'none') video.preload = 'auto'
+          // Try with sound first; browsers only allow it once the visitor has clicked/tapped the page.
+          auto = false
+          video.muted = false
+          video.play().catch(() => {
+            // Sound blocked: play muted now, and turn the sound on at the visitor's first click, tap or key press.
             auto = true
             video.muted = true
-            if (video.preload === 'none') video.preload = 'auto'
+            wrap.classList.remove('playing')
             wrap.classList.add('autoplaying')
-          }
-          video.play().catch(() => { auto = false; wrap.classList.remove('autoplaying') })
+            video.play().catch(() => { auto = false; wrap.classList.remove('autoplaying') })
+          })
         } else if (!video.paused) {
           video.pause()
         }
